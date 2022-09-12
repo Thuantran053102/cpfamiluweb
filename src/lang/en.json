@@ -1,0 +1,16 @@
+{
+    "home": "Home",
+    "Link": "Link",
+    "favorite": "Favorite",
+    "help": "Help",
+    "login": "Login",
+    "register": "Register",
+    "personal": "Personal",
+    "logout": "Logout",
+    "btnSearch": "Search now",
+    "searchText": "Input your keyword",
+    "viewPrice": "Sort price",
+    "sortAsc": "Sort ascending",
+    "sortDesc": "Sort descending",
+    "copyright": "Copyright 2017"
+}

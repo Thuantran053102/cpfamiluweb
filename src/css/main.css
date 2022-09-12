@@ -1,0 +1,44 @@
+:root{
+    --main-bg-color:#fffaed;
+    --block-bg-color:#E5E5E5;
+    --bg-navbar-color:#f178a1;
+    --bg-hover-color:#ea5889;
+
+    --text-title-color:#f178a1;
+    --text-color:#fff;
+    --text-logo-color:#eaeaea;
+    --text-color-gray:#7f5a66;
+    
+
+    --status-waiting-color:#E5E5E5;
+    --status-waiting-background:rgba(250, 0, 0, 0.2);
+    --status-doing-color:rgb(250, 104, 0);
+    --status-doing-background:rgba(250, 104, 0,0.2);
+    --status-done-color:rgb(66, 209, 157);
+    --status-done-background:rgba(66, 209, 157,0.2);
+
+    --admin-btn-color:#8FD192;
+    --admin-background:#FAFBFE;
+
+    --boder-radius-s:5px;
+    --boder-radius-l:10px;
+
+    --nav-color: #58A578;
+    
+    --love-color-1: #8FD192;
+    --love-color-2: #C8C8A9;
+    --love-color-3: #F9CDAD;
+    --love-color-4: #FC9D9A;
+    --love-color-5: #FE4365;
+
+    --btnPage-color: #5edb92;
+}
+
+.dropNav .dropdown-menu.show{
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.navbar-toggler:focus{
+    box-shadow: none !important;
+}

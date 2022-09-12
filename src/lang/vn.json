@@ -1,0 +1,16 @@
+{
+    "home": "Trang chủ",
+    "Link": "Đường dẫn",
+    "favorite": "Yêu thích",
+    "help": "Trợ giúp",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "personal": "Cá nhân",
+    "logout": "Đăng xuất",
+    "btnSearch": "Tìm ngay",
+    "searchText": "Nhập từ khoá cần tìm",
+    "viewPrice": "Xem giá",
+    "sortAsc": "Tăng dần",
+    "sortDesc": "Giảm dần",
+    "copyright":"© 2020 C.P. VietNam. Tất cả các quyền được bảo hộ."
+}

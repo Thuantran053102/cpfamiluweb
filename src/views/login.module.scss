@@ -1,0 +1,95 @@
+.main{
+    background-color: var(--main-bg-color);
+    height: 100vh;
+    .mainWrap{
+
+        .containerWrap{
+        
+            .Wrap{
+            
+                .topWrap{
+                    padding: 5px 0px;
+                    .topLeftWrap{
+                        display: inline-block;
+                        .titleWrap{
+                            font-size: 28px;
+                            font-weight: bold;
+                            color: var(--text-title-color);
+                            
+                        }
+                        .line{
+                            border-top: 1px solid black;
+                            margin: 5px 0px;
+                        }
+                        .registeredWrap{
+                            display: flex;
+                            justify-content: space-between;
+                            
+                            .registere{
+                                font-size: 12px;
+                                
+                            }
+                        }
+                        .registeredWrap:hover {
+                            cursor: pointer;
+                            color: var(--text-title-color);
+                        }
+                    }
+                }
+                //@at-root
+                .bodyWrap{
+                   display: flex;
+                   justify-content: center;
+                    .loginWrap{
+                        background-color: #fefefe;
+                        box-shadow: 1px 7px 20px rgba($color: #000000, $alpha: 0.1);
+                        border-radius: 10px;
+                        .headLoginWrap{
+                            text-align: center;
+                            ;
+                            .titleLogin{
+                                font-weight: bold;
+                                color: var(--text-title-color) ;
+                                text-shadow: 2px  0px rgba($color: var(--text-title-color), $alpha: 0.1);
+                            }
+                            .decriptionLogin{
+                                max-width: 290px;
+                            }
+                        }
+                        .bodyLoginWrap{
+                            
+                            .inputWrap{
+                                border: 1px solid #333;
+                                margin: 5px 0px;
+                                border-radius: 5px;
+                                overflow: hidden;
+                                .input{
+                                    border: none;
+                                    font-size: 14px;
+                                    
+                                }
+                                .input:focus{
+                                    outline: none;
+                                }
+                            }
+                            .trouble{
+                                font-size: 12px;
+                                color: black;
+                                font-weight: 600;
+                            }
+                            .trouble:hover{
+                                cursor: pointer;
+                            }
+                            .btnLogin{
+                                background-color: var(--text-title-color);
+                                border: none;
+                                border-radius: 5px;
+                                color: #fefefe;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
