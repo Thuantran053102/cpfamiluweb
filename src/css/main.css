@@ -1,11 +1,11 @@
 :root{
     --main-bg-color:#fffaed;
     --block-bg-color:#E5E5E5;
-    --bg-navbar-color:#f178a1;
+    --bg-navbar-color:rgb(255, 255, 255);
     --bg-hover-color:#ea5889;
 
     --text-title-color:#f178a1;
-    --text-color:#fff;
+    --text-color:#009688;
     --text-logo-color:#eaeaea;
     --text-color-gray:#7f5a66;
     
@@ -35,10 +35,324 @@
 }
 
 .dropNav .dropdown-menu.show{
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 10px;
+    margin-left: 50%;
+    
 }
 
 .navbar-toggler:focus{
     box-shadow: none !important;
 }
+.card-cv:hover{
+    margin-top: -10px;
+}
+
+:root{
+    --background-main-color:#E5E5E5;
+    --main-color:#3E4851;
+    --text-nav-color:#ffff;
+    --text-nav-hover:#cccc;
+
+    --status-waiting-color:#FA6767;
+    --status-waiting-background:rgba(250, 0, 0, 0.2);
+    --status-doing-color:rgb(250, 104, 0);
+    --status-doing-background:rgba(250, 104, 0,0.2);
+    --status-done-color:rgb(66, 209, 157);
+    --status-done-background:rgba(66, 209, 157,0.2);
+
+    --admin-btn-color:#8FD192;
+    --admin-background:#FAFBFE;
+
+    --boder-radius:5px;
+
+    /* love color green  */
+    --nav-color: #58A578;
+    
+    --love-color-1: #8FD192;
+    --love-color-2: #C8C8A9;
+    --love-color-3: #F9CDAD;
+    --love-color-4: #FC9D9A;
+    --love-color-5: #FE4365;
+
+    --btnPage-color: #5edb92;
+}
+#root{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.headnav::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color:var(--text-color);
+
+}
+/* Màu nền cho trang Admin  */
+.bg-admin{
+    background-color: #F0F3FC;
+}
+/* các nút cho các trạng thái  */
+.base-color:hover{
+    color: var(--love-color-1) !important;
+}
+.bg-base-color{
+    background-color: var( --love-color-1);
+}
+/* đang chờ */
+.waitingStatus ,.doingStatus ,.doneStatus,.doingStatusUse, .failStatus{
+    border-radius: var(--boder-radius);
+    text-align: center;
+    display: inline-block;
+    line-height: 1.5rem;
+    width: 134px;
+}
+.waitingStatus{
+    background-color: var( --status-waiting-background) !important;
+    color: var(--status-waiting-color);
+}
+.waitingStatus:hover .changeStatus{
+    display: block !important;
+}
+.doingStatusUse{
+    background-color: var(--status-done-background) !important;
+    color: var(--status-done-color);
+}
+.doingStatusUse:hover .changeStatusUse{
+    display: block !important;
+}
+.doingStatus{
+    background-color: var(--status-doing-background) !important;
+    color: var(--status-doing-color);
+}
+.doneStatus{
+    background-color: var(--status-done-background) !important;
+    color: var(--status-done-color);
+}
+.failStatus{
+    background-color: #F0F3FC !important;
+    color: var(--status-waiting-color);
+}
+/* đang thực thi */
+/* đã hoàng thành */
+
+html{
+    height:100%;
+    font-size: 1rem;
+    font-family: Roboto, sans-serif !important;
+    box-sizing: border-box;
+}  
+body{
+    height:100%;
+    padding-right: 0px !important;
+    font-family: Roboto, sans-serif !important;
+} 
+/* navbar client */
+
+.css-1s2u09g-control{
+    box-shadow: none;
+}
+/* input */
+.input{
+    border-radius:var(--boder-radius) ;
+    border: none;
+}
+.input:focus{
+    outline: none;
+}
+.btn.btnPri{
+    background-color: var(--admin-btn-color) ;
+    color: var(--text-nav-color) ;
+}
+.css-1okebmr-indicatorSeparator{
+    background-color: transparent !important;
+}
+.dropdonor .dropdown-menu{
+   left: 40% !important;
+    right: 0px;
+}
+.dropdonor .dropdown-item{
+    text-decoration:none !important;
+}
+
+.dropdown-item.hide{
+    display: none !important;
+}
+/* // DateRangePicker */
+/* .projectDaterang{
+    position: relative;
+}
+.rs-picker-daterange-panel
+{
+    left: 340px !important;
+    top: 500px !important;
+} */
+.rs-picker-daterange-menu{
+    left: 350px !important;
+    top: 300px !important;
+}
+.rs-picker-toggle-read-only{
+    position: relative;
+    width: 100% !important;
+   
+} 
+.rs-picker-toggle{
+    margin-top: 5px;
+    height: 50px;
+}
+.rs-picker-toggle-value{
+    line-height: 2rem;
+    width: 100%;
+    text-align: start;
+    font-size: 0.875rem;
+    color: #333 !important;
+}
+
+
+/* Thanh progress  */
+.progress-bar {
+    background-color: var(--love-color-1) !important;
+}
+
+.fillerBlock{
+    display: flex;
+    flex-direction: column;
+}
+/* // project admin */
+.project-admin .dropdown-toggle::after{
+    content: '';
+    display: none;
+}
+.css-26l3qy-menu{
+    z-index: 10 !important;
+}
+/* add project */
+.addprojectmain .Add_category__ywTfX{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.addprojectmain .css-1rhbuit-multiValue{
+ 
+}
+.add-project_editor .ck-editor__main{
+    height:250px ;
+}   
+.ck-editor__main .ck-editor__editable_inline{
+    height: 100%;
+}
+.datepicker-addProject .rs-picker-toggle-textbox.rs-picker-toggle-read-only
+{
+    padding: 10px !important;
+    
+}
+.datepicker-addProject .rs-picker-toggle-value{
+    
+    display: block;
+    text-align: center;
+    width: 100% !important;
+}
+.datepicker-addProject .rs-picker-toggle-clean.rs-btn-close{
+    display: none;
+}
+.datepicker-addProject .rs-picker-toggle-caret.rs-icon{
+    display: none;
+}
+/* bỏ mục thêm ảnh */
+.removeImg .ck-file-dialog-button{
+    display: none !important;
+}
+/* // alert */
+
+.ajs-button.ajs-ok{
+    color: var( --text-nav-color);
+    border-radius: var(--boder-radius);
+    background-color: var( --love-color-1);
+}
+.ajs-button.ajs-cancel{
+    border-radius: var(--boder-radius);
+}
+/* title admin */
+/* Sweet alert */
+.swal-text {
+    display: block;
+    text-align: center;
+    line-height: 1.6rem;
+  }
+  .swal2-cancel .btn .btn-danger{
+      margin-right: 10px !important;
+  }
+  .d-flex.justify-content-between.hide ,.bg-danger.btn-secondary.hide{
+      display: none !important;
+  }
+  .hide.btn.btn-primary{
+    display: none !important;
+  }
+  .d-inline-block.hide{
+    display: none !important;
+  }
+
+  .prevBtn{
+   
+    border-top-left-radius: 40%;
+    border-bottom-left-radius: 40%;
+    color: #fff;
+    background-color: var(--btnPage-color);
+    
+}
+.nextBtn{
+   
+    border-top-right-radius: 40%;
+    border-bottom-right-radius: 40%;
+    color: #fff;
+    background-color: var(--btnPage-color);
+
+}
+.swal2-confirm.swal2-styled{
+    background-color: #2bb9c4 !important;
+}
+.bg-danger.sleep.btn-primary{
+    background-color: var(--love-color-4) !important;
+}
+.tt-sum .rs-picker-toggle-clean.rs-btn-close,
+ .tt-sum .rs-picker-toggle-caret.rs-icon,
+ .tt-sum .rs-picker-toggle-placeholder{
+    margin-top: 5px;
+}
+/* @keyframes example {
+    from { margin-top: 0px;}
+    to {}
+  } */
+.card-cv{
+   
+}
+.card-cv{
+    transition: all 0.3s;
+   
+}
+.card-cv:hover{
+    
+    margin-top: -10px;
+}
+.download-table-xls-button{
+    background-color: var(--status-doing-color);
+    border-radius: 5px;
+    border: none;
+    color: white;
+    height: 100%;
+    margin-right: 10px;
+
+}
+.css-1s2u09g-control , .css-1pahdxg-control{
+    height:50px;
+}
+.rs-picker-toggle-read-only{
+    position: absolute !important;
+}
+.rs-picker-toggle-wrappe{
+    width: 100%;
+}
+/* #root{ padding: 10px; } */
+/* .rs-stack-item{
+    width: 100%;
+} */

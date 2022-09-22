@@ -11,6 +11,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import Login from './views/login';
 import {QRCodeSVG} from 'qrcode.react';
 import ClientLayout from './layouts/ClientLayout';
+import "rsuite/dist/rsuite.css";
 
 import "./css/main.css"
 
@@ -92,6 +93,7 @@ export default class App extends Component {
         <BrowserRouter>
             <Switch>
               <Route  path="/login" component={Login}/>
+              
               <Route  path="/" component={ClientLayout}/>
             </Switch>
         </BrowserRouter>

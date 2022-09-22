@@ -3,8 +3,10 @@ import ClientNavbar from '../shares/ClientNavbar';
 import ClientFooter from '../shares/ClientFooter';
 import Login from '../views/login';
 import Dashboard from '../views/Dashboard';
-import { dashboard } from '../api/SubUrl';
-
+import ProtectedRoute from '../shares/ProtectedRoute';
+import { dashboard,member,register } from '../api/SubUrl';
+import Member from '../views/Member';
+import Register from '../views/Register';
 import {
     BrowserRouter,
     Route, Switch,Redirect
@@ -21,11 +23,16 @@ function ClientLayout(props) {
         <>
 
         <ClientNavbar/>
-            <div className=" flex-grow-1">
+        <div className="bg-admin flex-grow-1">
                 <Switch>
-                   
-                    {/* <Route exact path="/" component={Login}/> */}
-                    <Route exact path={dashboard} component={Dashboard}/>
+             
+                    <Route exact path="/login" component={Login}/>
+              
+                    <ProtectedRoute exact path="/" component={Dashboard}/>
+                    <ProtectedRoute exact path={register} component={Register}/>
+                    <ProtectedRoute exact path={dashboard} component={Dashboard}/>
+                    <ProtectedRoute exact path={member} component={Member}/>
+                    
                 </Switch>
             </div>
         <ClientFooter/>

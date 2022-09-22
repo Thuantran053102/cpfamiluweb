@@ -12,5 +12,7 @@
     "viewPrice": "Sort price",
     "sortAsc": "Sort ascending",
     "sortDesc": "Sort descending",
-    "copyright": "Copyright 2017"
+    "copyright": "Copyright 2017",
+    "hello":"Hello",
+    "member":"Member"
 }

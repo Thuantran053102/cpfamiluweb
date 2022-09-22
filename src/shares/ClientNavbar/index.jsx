@@ -14,11 +14,23 @@ import { changeToEng, changeToVn } from '../../actions';//
 import { LoadLang } from '../../components/Lang';//
 import { connect } from 'react-redux';
 import { CartContext } from '../../contexts/CartContext';
+import { dashboard ,member} from "../../api/SubUrl";
+import { Path } from "../../api/Path";
+import { CheckTOkenRule,CheckUserRule } from "../Func";
+import { ApiAuthority } from "../../api/User";
 const lang = LoadLang();
 class ClientNavbar extends Component{
   constructor(props)
   {
     super(props)
+    this.state={
+      nameuser:'',
+      pathname:window.location.pathname,
+      isLoading:false
+    }
+  }
+  componentDidMount=()=>{
+    this.handleGetName()
   }
     handleLang = (language) => {
 
@@ -31,7 +43,53 @@ class ClientNavbar extends Component{
       }
       document.location.reload();
     }
+    handleSingout=()=>{
+      localStorage.clear();
+      window.location='/login'
+    }
+    handleChangePage=(type)=>{
+      if(type===dashboard)
+      {
+
+        window.location=dashboard;
+      }
+      else if(type===member)
+      {
+          window.location=member;
+      }
+    }
+   
+
+    handleGetName=async()=>{
+      this.setState({isLoading:true})
+      let Token = await CheckTOkenRule();
+      let User = await CheckUserRule();
+      const username=User.username
+      const password= User.password
+  
+      const valuef={
+          "DataBaseName": Path.DataBaseName,
+          Params:  [
+            username,
+            password
+          ],
+          StoreProcedureName: "SP_USER_NAME",
+          SchemaName:"SQL01UAT"
+          }
+      let formData = new FormData();
+      formData.append('data',JSON.stringify(valuef))
+      ApiAuthority(username,password,Token,formData,async res => {
+         
+          if(res.Status===200)
+          {   
+            
+              this.setState({nameuser:res.Data[0].Full_Name,isLoading:false})
+          }
+      })
+  }
     render(){
+      const {pathname,nameuser} = this.state
+      console.log(pathname)
         return(
             <>
               <Navbar className={clsx(Style.main)}  expand="lg">
@@ -45,10 +103,10 @@ class ClientNavbar extends Component{
                   <Navbar.Toggle className={clsx(Style.btnMenu)} aria-controls="basic-navbar-nav" />
                   <Navbar.Collapse className={clsx(Style.Collapse)} id="basic-navbar-nav">
                     <Nav className={clsx(Style.nav,"me-auto")}>
-                      <Nav.Link className={clsx(Style.itemNav)} href="#home">{lang.home}</Nav.Link>
-                      <Nav.Link className={clsx(Style.itemNav)} href="#link">{lang.Link}</Nav.Link>
+                      <Nav.Link onClick={()=>{this.handleChangePage(dashboard)}} className={clsx(Style.itemNav,pathname===dashboard ||pathname=='/' ? 'headnav' :null)} >{lang.home}</Nav.Link>
+                      <Nav.Link onClick={()=>{this.handleChangePage(member)}} className={clsx(Style.itemNav,pathname===member ? 'headnav' :null)} >{lang.member}</Nav.Link>
 
-                      <NavDropdown  className={clsx(Style.dropdown)} title="Dropdown" id="basic-nav-dropdown">
+                      {/* <NavDropdown  className={clsx(Style.dropdown)} title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item className={clsx(Style.dropdownItem)} href="#action/3.1">Action</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">
                           Another action
@@ -58,7 +116,7 @@ class ClientNavbar extends Component{
                         <NavDropdown.Item href="#action/3.4">
                           Separated link
                         </NavDropdown.Item>
-                      </NavDropdown>
+                      </NavDropdown> */}
                       
                      
                     </Nav>
@@ -70,10 +128,15 @@ class ClientNavbar extends Component{
                         </button>
                         <div className={clsx(Style.userWrap)}>
                           <div className={clsx(Style.decription)}>
-                            <p className={clsx(Style.nameUser)}>Trần Văn Thuận</p>
+                          <div className="d-flex flex-column text-end">
+                            <span id="admin-navbar-email" className="px-2">{lang.hello}
+                             <span className="fw-bold"style={{color:'var(--love-color-5)'}}>  {  nameuser}</span>!</span>
+                             
+                             </div>
+                              
                             <NavDropdown  className={clsx(Style.dropdown,'dropNav')} title="Donor" id="basic-nav-dropdown">
                               <NavDropdown.Item className={clsx(Style.dropdownItem)} href="#action/3.1">Cá nhân</NavDropdown.Item>
-                              <NavDropdown.Item onClick={()=>{window.location='/login'}} className={clsx(Style.dropdownItem)}  href="#action/3.2">đăng xuất</NavDropdown.Item>
+                              <NavDropdown.Item onClick={()=>{this.handleSingout()}} className={clsx(Style.dropdownItem)}  href="#action/3.2">đăng xuất</NavDropdown.Item>
                             </NavDropdown>
                             
                           </div>

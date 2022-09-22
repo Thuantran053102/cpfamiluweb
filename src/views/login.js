@@ -15,8 +15,8 @@ class Login extends Component{
     {
         super(props)
         this.state={
-            customerCode:'',
-            password:'',
+            customerCode:'vanthuan',
+            password:'trantran',
             isLoading:false,
         }
     }
@@ -126,7 +126,7 @@ class Login extends Component{
         }
         
     render(){
-        const {isLoading} = this.state
+        const {isLoading,customerCode, password} = this.state
         return(
             <div className="flex-grow-1">
              {
@@ -158,10 +158,10 @@ class Login extends Component{
                                         </div>
                                         <div className={clsx(Style.bodyLoginWrap ,"py-2")}>
                                             <div className={clsx(Style.inputWrap)}>
-                                                <input  onChange={(e)=>{this.onChangeText('user',e.target.value)}} className={clsx(Style.input ,"py-2 px-2 w-100")} type="text" placeholder="Customer Code "></input>
+                                                <input value={customerCode}  onChange={(e)=>{this.onChangeText('user',e.target.value)}} className={clsx(Style.input ,"py-2 px-2 w-100")} type="text" placeholder="Customer Code "></input>
                                             </div>
                                             <div className={clsx(Style.inputWrap)}>
-                                                <input onChange={(e)=>{this.onChangeText('pass',e.target.value)}} className={clsx(Style.input ,"py-2 px-2  w-100")} type="password" placeholder="Nhập mật khẩu"></input>
+                                                <input value={password} onChange={(e)=>{this.onChangeText('pass',e.target.value)}} className={clsx(Style.input ,"py-2 px-2  w-100")} type="password" placeholder="Nhập mật khẩu"></input>
                                             </div>
                                             <span className={clsx(Style.trouble  ,"d-block pt-3")}>
                                                 Gặp sự cố trong đăng nhập?

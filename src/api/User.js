@@ -111,7 +111,7 @@ export const ApiAuthority= (userName,Pass,token,data,handleData) =>{
 }
 
 export const postManagerImageOpenSale = (User_Name, User_Password, token, FormData, handleData) => {
-   
+    console.log(Api._uploadimg,token,FormData)
     const params = {
         UserName: User_Name,
         Password: User_Password,
