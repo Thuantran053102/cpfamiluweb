@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import Select from 'react-select'
-import { register,dashboard } from "../../api/SubUrl";
+import { register,dashboard,profileMem } from "../../api/SubUrl";
 import { Link } from "react-router-dom";
 class Member extends Component{
     constructor(props)
@@ -320,6 +320,7 @@ class Member extends Component{
                           
                         </div>
                     </div>
+                    
                     <div className={clsx('list col-9')}>
                         <div className={clsx(Style.listPoject, 'h-100')}>
                             <div className="page-aside-right h-100 d-flex flex-column justify-content-between">
@@ -380,32 +381,12 @@ class Member extends Component{
                                                                     </Dropdown.Toggle>
 
                                                                     <Dropdown.Menu className={clsx(Style.listDrop)} style={{}}>
-                                                                        <Dropdown.Item onClick={() => {
-
-                                                                            // powerCreate = 3
-                                                                            // handleShow(item, 'Chỉnh sửa thông tin người dùng')
-                                                                        }} className={clsx(Style.itemDrop)}><i className="mdi mdi-window-restore "></i>
+                                                                        <Dropdown.Item  onClick={() => {window.location=`/profileMem/${item.EMPL_ID}`}}  className={clsx(Style.itemDrop)}><i className="mdi mdi-window-restore "></i>
 
                                                                             Chi tiết
                                                                         </Dropdown.Item>
-                                                                        <Dropdown.Item 
-                                                                        // onClick={() => handleChangePassword(item.email)} 
-                                                                        className={clsx(Style.itemDrop)} ><i className={clsx("mdi mdi-lock-reset")}></i>
-                                                                            Đổi mật khẩu
-                                                                        </Dropdown.Item>
-                                                                        <Dropdown.Item 
-                                                                        // onClick={() =>  handleblockAcount('mở khóa', item.id) }
-                                                                     className={clsx(Style.itemDrop, item.status === 1 ? "show" : "hide")} ><i className={clsx("mdi mdi-lock-reset")}></i>
-                                                                            Mở khóa tài khoản
-                                                                        </Dropdown.Item>
-                                                                        <Dropdown.Item
-                                                                        //  onClick={() => handleblockAcount('khóa', item.id)}
-                                                                          className={clsx(Style.itemDrop, item.status === 1 ? "hide" : "show")} >
-                                                                            <i className="mdi mdi-block-helper"></i>
-
-                                                                            Khóa tài khoản
-                                                                        </Dropdown.Item>
-
+                                                                       
+                                                                        
                                                                     </Dropdown.Menu>
                                                                 </Dropdown>
                                                             </td>

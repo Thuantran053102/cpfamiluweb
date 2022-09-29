@@ -80,7 +80,9 @@ class Dashboard extends Component{
                         <div className='card-cv shadow-sm p-3 mb-3 bg-body rounded bg-white p-4 d-flex justify-content-between text-decoration-none'>
                         <div className={clsx('col-9')}>
                             <h5 className='text-secondary'>Thai đang làm</h5>
-                            <span className=' text-secondary font-weight-bold'><b className='' style={{ fontSize: '1.5rem' }}>{TLam}</b> người</span>
+                            <span className=' text-secondary font-weight-bold'>
+                                <b className='' style={{ fontSize: '1.5rem' }}>{TLam}</b>
+                                 người</span>
                         </div>
                         <div className={clsx('col-3 d-flex justify-content-end ')}>
                             <span className="mdi mdi-projector-screen px-2 mb-2 text-white rounded "

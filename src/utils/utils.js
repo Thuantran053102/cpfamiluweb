@@ -1,9 +1,10 @@
 import alertify from "alertifyjs";
 import * as $ from "jquery"
 import * as bootstrap from "bootstrap";
+import moment from "moment";
 import {get } from "jquery";
-import { getDate } from "rsuite/esm/utils/dateUtils";
-import moment from 'moment';
+import { getDate, getYear } from "rsuite/esm/utils/dateUtils";
+
 /** Alert toast config */
 const ROOT_URL = '/'
 export const alert = {
@@ -569,8 +570,56 @@ export function getDateRangeValue(element) {
 }
 $('#ipt-date-search').val("")
 
+export function getDateNew(date,type,value)
+{   
+    const fmDate= moment(date).format()
+    if(Number(type)===1) // trừ
+    {
+        return  String(Number(fmDate.slice(0,fmDate.indexOf('-')))- Number(value)) + String(fmDate.slice(fmDate.indexOf('-'))) 
+    }
+    else{
+        return String(Number(fmDate.slice(0,fmDate.indexOf('-')))+ Number(value)) + String(fmDate.slice(fmDate.indexOf('-'))) 
+    }
+}
 
+export function getBirthdate(date)
+{
+    var fmDate= moment(date).format('YYYY-MM-DD')
+        fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))+18) + String(fmDate.slice(fmDate.indexOf('-')))
+    return fmDate
+}
+export function getTerminationDate(date)
+{
+    var fmDate= moment(date).format('YYYY-MM-DD')
+        // fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))-18) + String(fmDate.slice(fmDate.indexOf('-')))
+    return fmDate
+}
+export function getDateNewHire()
+{
+    var fmDate= moment(new Date).format('YYYY-MM-DD')
+    fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))-1) + String(fmDate.slice(fmDate.indexOf('-')))
+ 
+return fmDate
+}
 
+export function getTerminationHire(date)
+{
+    var fmDate= moment(date).format('YYYY-MM-DD')
+    fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))+1) + String(fmDate.slice(fmDate.indexOf('-')))
+    
+    return fmDate
+}
+
+export function getDateNewBirth(){
+    var fmDate= moment(new Date).format('YYYY-MM-DD')
+    fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))-18) + String(fmDate.slice(fmDate.indexOf('-')))
+    return fmDate
+}
+export function getHireBirth(date){
+    var fmDate= moment(date).format('YYYY-MM-DD')
+    fmDate= String(Number(fmDate.slice(0,fmDate.indexOf('-')))-18) + String(fmDate.slice(fmDate.indexOf('-')))
+    return fmDate
+}
 export function removeUnicode(str) {
     var AccentsMap = [
         "aàảãáạăằẳẵắặâầẩẫấậ",
