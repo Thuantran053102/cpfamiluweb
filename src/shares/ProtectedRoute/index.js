@@ -10,6 +10,7 @@ ProtectedRoute.propTypes = {
 
 function ProtectedRoute({component: Component, role, ...restOfProps}) {
     
+    console.log()
     const userInfo = CheckTOkenRule()
    
     return (

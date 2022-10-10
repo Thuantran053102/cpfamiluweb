@@ -3,18 +3,16 @@ import Loading from "../../shares/Loading";
 import clsx from "clsx";
 import Style from './Register.module.scss';
 import default_img from "./../../images/default-avatar.jpg";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 import { Path } from "../../api/Path";
-import { Link } from "react-router-dom";
 import Select from 'react-select';
-import { isEmail, IsNullOrEmpty } from "../../utils/utils";
+import { isEmail, IsNullOrEmpty, removeUnicode } from "../../utils/utils";
 import { DatePicker,DateRangePicker, Stack } from 'rsuite';
-import addDays from 'date-fns/addDays';
-import subDays from 'date-fns/subDays';
-import isBefore from 'date-fns/isBefore';
+
 import { ApiAuthority } from "../../api/User";
-import isCenter from 'date-fns/isBefore';
+
+import Swal from "sweetalert2";
+
 import { getDateNew ,getBirthdate,getTerminationDate,getDateNewHire,
     getTerminationHire,getDateNewBirth,getHireBirth
 } from "../../utils/utils";
@@ -32,6 +30,7 @@ class Register extends Component{
       super(props)
       
       this.state = {
+        Group_Image_File:'',
         provinceData: [
             {User_ID:'USR001',
                 Full_Name:"Trần Văn Thuận",
@@ -49,6 +48,9 @@ class Register extends Component{
         valueSearch: '',
         valuePosition:'',
         valueCompany:'',
+        imgFormat:['png',"jpg","jpeg",
+        "JPG","PNG","JPEG","jpe",
+        "JPE","bmp","BMP","gif","GIF"],
         check:{
             chID:false,
             chName:false,
@@ -64,7 +66,7 @@ class Register extends Component{
             chBirthDate:false,
             chImg:false,
             chProvince:false,
-            chCountryName:false,
+            chCountryName:true,
             chNationality:false,
             chPosition:false,
             chCompany:false,
@@ -110,8 +112,8 @@ class Register extends Component{
             { value: '', label: '' }
           ],
         optionsSex :[
-            { value: 1, label: 'Nam' },
-            { value: 2, label: 'Nữ' },
+            { value: 'M', label: 'Nam' },
+            { value: "F", label: 'Nữ' },
           ],
         optionPerformance:[
             { value: 1, label: 'Tham gia' },
@@ -236,6 +238,7 @@ class Register extends Component{
         }
         if(key==='jobStatus')
         {
+                console.log('312321',item.value)
             this.setState({Member:{...Member,JobStatus:item.value}})
             
             // this.setState({jobStatus:item.value})
@@ -250,68 +253,34 @@ class Register extends Component{
         // this.setState(key,item)
     }
     handlePreviewAvatar= (e)=>{
-        // this.setState({imgValue:e.target.files[0]})
- 
-        // this.setState({
-        //     Banner_Image: e.target.files[0].name,
-        //     Banner_Image_File: e.target.files[0],
-        //     filePreview: URL.createObjectURL(e.target.files[0])
-        // });
+
+        const {imgFormat} = this.state
         const file = e.target.files[0];
-        file.review = URL.createObjectURL(file)
-        let name=e.target.files[0].name
-        let type=e.target.files[0].type
-        let uri = file;
+        let resultimg= imgFormat.find(function(item){
+            return removeUnicode((file.name).slice((file.name).lastIndexOf('.')+1))===removeUnicode(item)
+        })
+        if(!resultimg)
+        {
+            Swal.fire('File đã chọn sai định dạng')
+        }
+        else{
+            file.review = URL.createObjectURL(file)
+            
+            this.setState({
+                Group_Image_File:e.target.files[0],imgAvatar:e.target.files[0]
+            })
+            const {check} = this.state
+            if(e.target.files[0]){
+                this.setState({check:{...check,chImg:true}})
+            }
+            else{
+                this.setState({check:{...check,chImg:false}})
+            }
+        }
+      
        
-
-        // const name= "67b2a7ee-147f-4177-bf3e-aa11e155c7cf.jpg"
-        // const type= "image/jpg"
-        // const uri= "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540thuan.tran%252FCLBCP/ImagePicker/67b2a7ee-147f-4177-bf3e-aa11e155c7cf.jpg"
-        // setProjectValue({...projectValue, urlImg:e.target.files[0]})
-        // setImgValue(e.target.files[0])
-        this.setState({imgAvatar:file,
-            Banner_Image:{ uri, name, type }
-        })
-        this.handleCheckImg()
     }
 
-    handleCheckImg= async()=>{
-        const {Banner_Image,dataProfile} = this.state
-        const images=[]
-        await images.push(Banner_Image)
-        let Token = await CheckTOkenRule();
-        let User = await CheckUserRule();
-        const username=User.username
-        const password= User.password
-     
-        const Body = {
-            "DataBaseName":Path.DataBaseName,
-                "Params":  [
-                    'VN00070534'
-                ],
-                "StoreProcedureName": "SP_PICTUREVISIT_INSERT",
-            "SchemaName":"SQL01UAT"
-            }
-            const formData = new FormData();
-            formData.append('data',JSON.stringify(Body));
-         
-            if(images.length>0)
-            {
-                for(let i =0 ;i< images.length; i++)
-                {
-                    formData.append("files[]", images[i]);
-                }
-            }else{
-            }
-            postManagerImageOpenSale(username,password,Token,formData,async res => {
-              
-                if(res.Status ===200)
-              {
-                // Alert.alert("Thông báo", "Thành công") 
-                // this.fnHandleGetPicture()
-              }
-        })
-    }
 
     fileHandler = (event) => {    
        
@@ -547,24 +516,24 @@ class Register extends Component{
         })
     }
       handleValue = (type,e) => {
-        const {valueSearch} = this.state
+        const {valueSearch,Member} = this.state
         if(type==='Province')
         {
-            this.setState({valueSearch:e})
+            this.setState({valueSearch:e,Member:{...Member,Province_ID:e.value}})
             setTimeout(()=>{
                 this.fnHandleGetLocation(e.value)
             },500) 
         }
         if(type==='Nationality')
         {
-            this.setState({valueNationallity:e})
+            this.setState({valueNationallity:e,Member:{...Member,National_ID:e.value}})
         }
         else if(type==='Position')
         {
-            this.setState({valuePosition:e})
+            this.setState({valuePosition:e,Member:{...Member,Position_ID:e.value}})
         }else if(type ==='Company')
         {
-            this.setState({valueCompany:e})
+            this.setState({valueCompany:e,Member:{...Member,Company_Code:e.value}})
         }
 
         this.fncheckValues(type,e.value)
@@ -621,6 +590,7 @@ class Register extends Component{
     }
     handleYear=async (hire,termination,jobStatus)=>{
         
+        console.log(jobStatus)
         const {Member}= this.state
         if(!termination)
         {
@@ -637,17 +607,17 @@ class Register extends Component{
            
             let serviceYear=Number(termination.slice(0,termination.indexOf('-')))-Number(hire.slice(0,hire.indexOf('-')))
            
-            this.setState({Member:{...Member,Service_Year:serviceYear}})
+            this.setState({Member:{...Member,Service_Year:serviceYear,JobStatus:jobStatus}})
         }
         else if(Number(jobStatus)===1)
         {
-            this.setState({Member:{...Member,Service_Year:IsNullOrEmpty,Termination_DT:''}})
+            this.setState({Member:{...Member,Service_Year:IsNullOrEmpty,Termination_DT:'',JobStatus:jobStatus}})
         }
        
     }
 
     fncheckValues=(type,value)=>{
-        const {stateProfile}= this.state
+        const {Member}= this.state
         if(type==='EMPL_ID')
         {
             
@@ -706,10 +676,10 @@ class Register extends Component{
         if(type=== 'terminationDate')
         {
         
-            // const {check,stateProfile} = this.state
+            // const {check,Member} = this.state
             // (value && moment(value).format("DD/MM/YYYY") !== moment(new Date()).format("DD/MM/YYYY")) ?this.setState({check:{...check,chTermination:false}}):this.setState({check:{...check,chTermination:true}})
 
-            const {check,stateProfile} = this.state
+            const {check,Member} = this.state
             
             value && moment(value).format("DD/MM/YYYY") !== moment(new Date()).format("DD/MM/YYYY") ?this.setState({check:{...check,chTermination:true}}):this.setState({check:{...check,chTermination:false}})
         }
@@ -744,6 +714,155 @@ class Register extends Component{
             value ? this.setState({check:{...check,chCompany:true}}):this.setState({check:{...check,chCompany:false}})
         }
     }
+    handleCreateMem=async()=>{
+        const {Member,check,Group_Image_File} = this.state
+        console.log('12323',check)
+        let tifOptions = Object.keys(check).map(function( key  ) {
+      
+            
+              return check[key]
+            
+          });
+         
+          let isDescArray= tifOptions.every(function (item, index, arr) {
+                if (item) {
+                    return true
+                } else {
+                    return false
+                }
+            });
+            
+           if(isDescArray)
+           {
+
+            console.log('3q21',Member)
+               let Token = await CheckTOkenRule();
+               let User = await CheckUserRule();
+               const username=User.username
+               const password= User.password
+               const Body = {
+                   "DataBaseName": Path.DataBaseName,
+                       "Params":  [
+                         Member.EMPL_ID,
+                         Member.Name_Local,
+                         Member.Sex,
+                         moment(Member.BirthDate).format('yyyy-MM-DD') ,
+                         moment(Member.Hire_DT).format('yyyy-MM-DD'),
+                         Member.Termination_DT ?moment( Member.Termination_DT).format('yyyy-MM-DD'):'',
+                         Member.Service_Year,
+                         Member.Performance,
+                         Member.Phone,
+                         Member.Email,
+                         Member.Address,
+                         Member.Status,
+                         Member.JobStatus,
+                         Member.Situation,
+                         Member.HealthStatus,
+                         Member.Remark,
+                         Member.Province_ID,
+                         Member.Position_ID,
+                         Member.National_ID,
+                         Member.Company_Code
+                       ],
+                       "StoreProcedureName": "SP_MEMBER_INSERT",
+                   "SchemaName":"SQL01UAT"
+                   }
+                   const formData = new FormData();
+                   formData.append('data',JSON.stringify(Body));
+                   formData.append("files", Group_Image_File);
+                 
+                   postManagerImageOpenSale(username,password,Token,formData,async res => {
+                    console.log(res)
+                     if(res.Data.length>0)
+                     {
+                       Swal.fire('Mã nhân viên trùng')
+                      
+                     }
+                     else if(res.Status ===200)
+                     {
+                       
+                       // this.fnhandleGetIDFullNameUsr()
+                       Swal.fire({
+                           position: 'top-end',
+                           icon: 'success',
+                           title: 'Thêm thành viên thành công',
+                           showConfirmButton: false,
+                           timer: 1500
+                         })
+                         this.fnhandleGetIDFullNameUsr()
+                     }
+               })
+           }
+           else{
+            let timerInterval
+            Swal.fire({
+              title: 'Một vài thông tin chưa hợp lệ vui lòng kiểm tra lại',
+              timer: 2000,
+              timerProgressBar: true,
+            }).then((result) => {
+              if (result.dismiss === Swal.DismissReason.timer) {
+                console.log('I was closed by the timer')
+              }
+            })
+           }
+           
+     
+    }
+
+    
+fnhandleGetIDFullNameUsr=async()=>{
+
+    let Token = await CheckTOkenRule();
+    let User = await CheckUserRule();
+    const username=User.username
+    const password= User.password
+    const Body = {
+        "DataBaseName": Path.DataBaseName,
+            "Params":  [
+              username,// sửa
+              password
+            ],
+            "StoreProcedureName": "SP_USER_GET",
+        "SchemaName":"SQL01UAT"
+        }
+        const formData = new FormData();
+        formData.append('data',JSON.stringify(Body));
+        postManagerImageOpenSale(username,password,Token,formData,async res => {
+          if(res.Data)
+          {
+            await this.setState({user:res.Data})
+          
+             this.fnhandleSaveLog(res.Data)
+          }
+        })
+  }
+  
+  fnhandleSaveLog=async(useId)=>{
+    const {Member} = this.state
+    let Token = await CheckTOkenRule();
+    let User = await CheckUserRule();
+    const username=User.username
+    const password= User.password
+    const Body = {
+        "DataBaseName": Path.DataBaseName,
+            "Params":  [
+              '1',// thêm
+              `Thêm thông tin thành viên ${Member.Name_Local} id ${Member.EMPL_ID} `,
+              useId[0].User_ID,
+              '1'// member
+            ],
+            "StoreProcedureName": "SP_LOG",
+        "SchemaName":"SQL01UAT"
+        }
+        const formData = new FormData();
+        formData.append('data',JSON.stringify(Body));
+  
+        postManagerImageOpenSale(username,password,Token,formData,async res => {
+          
+        })
+  }
+  
+  
     render(){
         const {isLoading,imgValue,optionsSex,optionsStatus,
             optionsJobStatus,status,Member,imgAvatar,optionPerformance,
@@ -751,7 +870,7 @@ class Register extends Component{
             optionsCompany,valueCompany,valueNationallity,optionsProvince,check}= this.state
 
        
-           
+         
 
         return(
         
@@ -779,7 +898,7 @@ class Register extends Component{
                                 src={imgAvatar.review ? imgAvatar.review : default_img} 
                                 className={clsx(Style.imgavatar_item, "mx-auto d-block img-fluid")} />
                                 {
-                                    Member.Image===''?<span className="py-2" style={{marginTop:'10px', color:'red',display:'block', textAlign:'center'}}>Chưa hợp lệ</span>:null
+                                    !check.chImg?<span className="py-2" style={{marginTop:'10px', color:'red',display:'block', textAlign:'center'}}>Chưa hợp lệ</span>:null
                                 }
                             </div>
                             <div className='w-100 d-flex justify-content-end'>
@@ -1049,7 +1168,7 @@ class Register extends Component{
                 </div>
                 <div className='d-flex justify-content-end container'>
                
-                            <button className={clsx(Style.createbtn, 'btn')} onClick={()=>{console.log(Member)}}>Tạo</button>
+                            <button className={clsx(Style.createbtn, 'btn')} onClick={()=>{this.handleCreateMem()}}>Tạo</button>
                     {/* <Link >Tiếp tục</Link> */}
 
                 </div>

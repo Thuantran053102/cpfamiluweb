@@ -15,6 +15,7 @@ import moment from 'moment';
 import Select from 'react-select'
 import { register,dashboard,profileMem } from "../../api/SubUrl";
 import { Link } from "react-router-dom";
+import { handleGetLable } from "../../utils/utils";
 class Member extends Component{
     constructor(props)
     {
@@ -32,6 +33,7 @@ class Member extends Component{
             { value: '', label: 'Tất cả' },
           
           ],
+          optionsProvinceI:[],
           addtressProvince: [],
           ListMember: [
               {
@@ -155,7 +157,14 @@ class Member extends Component{
                         value: item.Province_ID,
                         label: item.Province_Name
                     })
-                })]})
+                })],optionsProvinceI:
+                res.Data.map((item)=>{
+                return({
+                    value: item.Province_ID,
+                    label: item.Province_Name
+                })
+            })})
+               
             }
              setTimeout(()=>{
                 if (id) {
@@ -214,11 +223,6 @@ class Member extends Component{
             Id=''
         }
 
-        console.log(123,valueSearch.value)
-        
-        console.log(321,removeUnicode(searchName))
-
-        console.log(321,removeUnicode(Id))
         let Token = await CheckTOkenRule();
         let User = await CheckUserRule();
         const username = User.username
@@ -238,7 +242,7 @@ class Member extends Component{
         let formData = new FormData();
         formData.append('data', JSON.stringify(valuef))
         ApiAuthority(username, password, Token, formData, async res => {
-            this.setState({ ListMember: res.Data })
+            // this.setState({ ListMember: res.Data })
         
            
         })
@@ -259,9 +263,10 @@ class Member extends Component{
         window.location= register
     }   
     render(){
-        const {isLoading,ListMember,provinceData,idSreach,valueSearch,optionsProvince,options,showSearchProvince
+        const {isLoading,ListMember,provinceData,idSreach,valueSearch,optionsProvinceI,optionsProvince,options,showSearchProvince
         ,nameSearch} = this.state
         
+        console.log('handleGetLable',handleGetLable(optionsProvinceI,3) )
        
         return(
             <div className="flex-grow-1">
@@ -269,15 +274,16 @@ class Member extends Component{
                 isLoading ? <Loading/> : ""
             }
             <div className={clsx(Style.project, "main-manage container-fluid w-100")}>
-                <div className="container-fluid w-100 pe-5">
+                <div className="container-fluid w-100 pe-md-5">
                     <div className={clsx('row')}>
-                        <div className={clsx(Style.titleBlock, ' w-100 main-top col-12 pt-4 pb-4')}>
-                            <h3 className={clsx(Style.titleProject)}>Quản lý thông tin thành viên</h3>
-                            <div>
+                        <div className={clsx(Style.titleBlock, 'ms-md-4 w-100 main-top col-12 pt-md-4 pb-md-4')}>
+                            <h3  className={clsx(Style.titleProject)}>Quản lý thông tin thành viên</h3>
+                            <div className={clsx(Style.buton,'pb-1')}>
 
                             <ReactHTMLTableToExcel
+                                        
                                         id="test-table-xls-button"
-                                        className="download-table-xls-button"
+                                        className="download-table-xls-button "
                                         table="table-to-xls"
                                         filename="tablexls"
                                         sheet="tablexls"
@@ -285,20 +291,16 @@ class Member extends Component{
                                         Style={{}}/>
 
                             <span onClick={()=>{this.handleChangePage()}} className={clsx(Style.btnCreateProject, "btn")}>
-                                  
-
                                 <span className="mdi mdi-plus-circle pe-2"></span> Thêm thanh viên 
                                 </span>
 
-                                {/* <button onClick={()=>{this.handleChangePage()}} className={clsx(Style.btnLogin,"w-100 my-2 py-1")}>
-                                                Thêm thành viên
-                                </button> */}
+                               
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className={clsx('row')}>
-                    <div className={clsx(Style.filterBlock, 'filter col-3')}>
+                    <div className={clsx(Style.filterBlock, 'filter col-12 col-md-3 mb-1')}>
                         <div className={Style.filterBlockSpan}>
                             <div className={''}>
                                 <h5 className={clsx(Style.searchContent, '')}>Tỉnh thành</h5>
@@ -321,7 +323,7 @@ class Member extends Component{
                         </div>
                     </div>
                     
-                    <div className={clsx('list col-9')}>
+                    <div className={clsx('list col-md-9 col-12')}>
                         <div className={clsx(Style.listPoject, 'h-100')}>
                             <div className="page-aside-right h-100 d-flex flex-column justify-content-between">
                                 <div className={clsx(Style.table_responsive, 'table-responsive')}  style={{overflow:"scroll",height:600}}>
@@ -331,7 +333,7 @@ class Member extends Component{
                                             <tr>
                                                 <th className="text-center" scope="col">#</th>
                                                 <th className="text-center" scope="col">MNV</th>
-                                                {/* <th className="text-center" scope="col">Hình ảnh</th> */}
+                                               
                                                 <th scope="col">Họ tên</th>
                                                 <th scope="col">Tuổi</th>
                                                 <th scope="col">Điện thoại</th>
@@ -342,7 +344,8 @@ class Member extends Component{
                                         </thead>
                                         <tbody >
                                             {
-                                                ListMember.map(function (item, index, arr) {
+                                              ListMember?  
+                                              ListMember.map(function (item, index, arr) {
                                                     return (
                                                         <tr key={index} style={{ lineHeight: '2rem' }}>
 
@@ -351,19 +354,23 @@ class Member extends Component{
                                                                {item.EMPL_ID}
 
                                                             </td>
-                                                            {/* <td>
-                                                                <div className={clsx(Style.imgAccount, "col-4 col-md-2 mx-auto")}>
-                                                                    <img id="img-banner1" src={Path.IMAGE_MYASSET+item.Image} className={clsx(Style.img_item, "rounded-circle border border-1 img-fluid img-auto-size ")} />
-                                                                </div>
-                                                            </td> */}
+                                                         
 
 
 
                                                             <td className={clsx(Style.lh,)} >{item.Name_Local}</td>
-                                                            <td className={clsx(Style.lh,)} > {moment(item.createTime).format('DD/MM/YYYY')}</td>
+                                                            
+                                                            <td className={clsx(Style.lh,)} > {Number(moment(item.createTime).format('DD/MM/YYYY').slice(
+                                                                moment(item.createTime).format('DD/MM/YYYY').lastIndexOf('/')+1)-
+                                                                Number(moment(item.BirthDate).format('DD/MM/YYYY').slice(moment(item.BirthDate).format('DD/MM/YYYY').lastIndexOf('/')+1)))}</td>
 
                                                             <td className={clsx(Style.lh,)} >{item.Phone}</td>
-                                                            <td className={clsx(Style.lh, "text-center")} >{item.Address}</td>
+                                                            {/* {handleGetLable(optionsProvince,item.Province_ID) } */}
+                                                            <td className={clsx(Style.lh, "text-center")} >{item.Address} ,
+                                                            { optionsProvinceI.length>0?
+                                                                handleGetLable(optionsProvinceI,item.Province_ID).label:null
+                                                            }
+                                                            </td>
                                                             <td className={clsx(Style.lh, "text-center", item.National_ID===2 ? 'text-warning' : 'text-primary')} >{item.National_ID===1?'VietNam':'Thai'}</td>
                                                             <td className={clsx(Style.lh, "text-center")} >
                                                                 <span className={clsx(Style.StatusItem, 'position-relative', Number(item.Performance) === 1 ? 'doneStatus' : 
@@ -396,6 +403,7 @@ class Member extends Component{
 
                                                     )
                                                 })
+                                                :null
                                             }
 
 
@@ -405,17 +413,7 @@ class Member extends Component{
                                 </div>
                                 <div className="d-flex">
                                     <div>
-                                        <button 
-                                        // onClick={() => setPageindex(pageindex != 0 ? pageindex - 1 : pageindex)}
-                                         className={clsx(Style.prevBtn, ' px-2')}>
-                                            <span className="mdi mdi-chevron-double-left"></span>
-                                        </button>
-                                        {/* <span className="px-3 text-secondary">{pageindex}</span> */}
-                                        <button 
-                                        // onClick={() => setPageindex(pageindex + 1)}
-                                         className={clsx(Style.nextBtn, ' px-2')}>
-                                            <span className="mdi mdi-chevron-double-right"></span>
-                                        </button>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -425,21 +423,7 @@ class Member extends Component{
 
                 </div>
 
-                {/* <Modal show={false} onHide={this.handleClose()} animation={false}>
-                    <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                    <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose()}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={this.handleClose()}>
-                        Save Changes
-                    </Button>
-                    </Modal.Footer>
-                </Modal> */}
-            
+               
             </div>
         </div>
         )

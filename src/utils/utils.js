@@ -102,7 +102,36 @@ export function getEmptyTemplateForDiv(title = '') {
 
 //     }
 // });
-
+export function handleGetLable(filterlist ,index){
+    console.log(filterlist,index)
+    return (
+        filterlist.find(function (itemCategoty) {
+          
+            if ( Number(itemCategoty.value) ===Number(index)) {
+                
+               
+                return itemCategoty
+            }
+        })
+    )
+}
+export function handleShowmodal()
+{
+    console.log('dấda')
+  
+}
+export function handleGetLableSex(filterlist ,index){
+    
+    return (
+        filterlist.find(function (itemCategoty) {
+            
+            if (itemCategoty.value.includes(index.trim())) {
+                
+                return itemCategoty
+            }
+        })
+    )
+}
 /** Get parameter from url */
 export function getUrlParam(param) {
     var sPageURL = window.location.search.substring(1),

@@ -14,5 +14,8 @@
     "sortDesc": "Sort descending",
     "copyright": "Copyright 2017",
     "hello":"Hello",
-    "member":"Member"
+    "member":"Member",
+    "history":"History",
+    "users":"Users"
+    
 }

@@ -7,7 +7,9 @@ class ClientFooter extends Component{
     render(){
         return(
             <>
-            <div>ha</div>
+            <div>
+                @ Gia Đình CP Liên Thế Hệ
+            </div>
             </>
         )
     }

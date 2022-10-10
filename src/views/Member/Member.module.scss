@@ -2,22 +2,42 @@
 .project{
     background-color: #F0F3FC;
     padding-bottom: 50px;
+    
     .titleBlock{
         display: flex;
         justify-content: space-between;
-        margin-left: 30px;
+        flex-wrap: wrap;
         .titleProject{
             font-size: 1.25rem;
         }
-        .btnCreateProject{
-            background-color: var( --admin-btn-color);
-            color: var(--text-nav-color);
+        @media all and (max-width: 720px) {
+            .titleProject {
+                display: block;
+                width: 100%;
+            }
         }
-        .btnCreateProject:hover{
-           text-decoration: none;
-           opacity: 0.9;
+        .buton{
+           
+            .btnCreateProject{
+                background-color: var( --admin-btn-color);
+                color: var(--text-nav-color);
+            }
+            .btnCreateProject:hover{
+               text-decoration: none;
+               opacity: 0.9;
+            }
+        }
+        @media all and (max-width: 720px) {
+            .buton {
+                display: block;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
         }
     }
+
+    
     .filterBlock{
        
         .filterBlockSpan{
@@ -64,6 +84,13 @@
               
             // }
         }
+        @media all and (max-width: 720px) {
+            .filterBlockSpan {
+                margin-left: 0px;
+                margin-right: 0px;
+            }
+        }
+        
 
     }
     .prevBtn{

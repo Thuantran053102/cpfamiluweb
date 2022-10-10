@@ -15,8 +15,8 @@ class Login extends Component{
     {
         super(props)
         this.state={
-            customerCode:'vanthuan',
-            password:'trantran',
+            customerCode:'',
+            password:'',
             isLoading:false,
         }
     }
@@ -59,7 +59,7 @@ class Login extends Component{
     fnHandleLogin = async (UrlToken,customerCode,password)=>
     {
         this.setState({isLoading:true})
-        console.log(1231)
+        
         // let { username, password } = this.state;
         let valuef = {
             "DataBaseName":Path.DataBaseName,
@@ -76,8 +76,11 @@ class Login extends Component{
             UserName: customerCode,
             Password: password,
           }
+         
         ApiLogin(formData, user, async res => {
+          
             if (res.Status === 200) {
+                
                 this.setState({isLoading:false})
                 if (res.Token) { 
                     let user = {"username":customerCode,"password": password}
@@ -102,7 +105,7 @@ class Login extends Component{
             }
         });
     }
-        fnHandleSubLogin = async ()=>{
+     fnHandleSubLogin = async ()=>{
             let Token = localStorage.getItem("_Token");
             const User = JSON.parse(localStorage.getItem('_User'));
  
@@ -124,7 +127,10 @@ class Login extends Component{
 
           
         }
-        
+         handleSubmit=(e)=>{
+            e.preventDefault();    
+            console.log('You clicked submit.');
+          }
     render(){
         const {isLoading,customerCode, password} = this.state
         return(
@@ -158,15 +164,16 @@ class Login extends Component{
                                         </div>
                                         <div className={clsx(Style.bodyLoginWrap ,"py-2")}>
                                             <div className={clsx(Style.inputWrap)}>
-                                                <input value={customerCode}  onChange={(e)=>{this.onChangeText('user',e.target.value)}} className={clsx(Style.input ,"py-2 px-2 w-100")} type="text" placeholder="Customer Code "></input>
+                                                <input value={customerCode}  onKeyPress={event => {if(event.key === 'Enter'){this.fnCheckLogin()}}}  onChange={(e)=>{this.onChangeText('user',e.target.value)}} className={clsx(Style.input ,"py-2 px-2 w-100")} type="text" placeholder="Customer Code "></input>
                                             </div>
                                             <div className={clsx(Style.inputWrap)}>
-                                                <input value={password} onChange={(e)=>{this.onChangeText('pass',e.target.value)}} className={clsx(Style.input ,"py-2 px-2  w-100")} type="password" placeholder="Nhập mật khẩu"></input>
+                                                <input  onKeyPress={event => {if(event.key === 'Enter'){this.fnCheckLogin()}}} value={password} onChange={(e)=>{this.onChangeText('pass',e.target.value)}} className={clsx(Style.input ,"py-2 px-2  w-100")} type="password" placeholder="Nhập mật khẩu"></input>
                                             </div>
                                             <span className={clsx(Style.trouble  ,"d-block pt-3")}>
                                                 Gặp sự cố trong đăng nhập?
                                             </span>
-                                            <button onClick={()=>{this.fnCheckLogin()}} className={clsx(Style.btnLogin,"w-100 my-2 py-1")}>
+                                            <button type="submit"  
+                                             onClick={()=>{this.fnCheckLogin()}} className={clsx(Style.btnLogin,"w-100 rounded-3 my-2 py-1")}>
                                                 Đăng nhập
                                             </button>
                                             {/* <button onClick={()=>{this.fnHandleSubLogin()}} className={clsx(Style.btnLogin,"w-100 my-2 py-1")}>

@@ -127,7 +127,7 @@ class Dashboard extends Component{
                         </div>
                     </div>
 
-                    <div className='col-6 mt-5 '>
+                    <div className='col-md-6 col-12 mt-5 '>
                         <h5 className='text-secondary mb-2'>Thống kê theo tỉnh thành</h5>
                         <div className='bg-white my-3 px-2 py-3' style={{position:'relative'}} >
                             <div style={{position:'absolute',top:-10,left:0, display:'inline-block', backgroundColor:'rgb(43, 185, 196)'}}>
@@ -207,7 +207,7 @@ class Dashboard extends Component{
                         </div>
                     </div>
 
-                    <div className='col-6 mt-5 ' style={{maxHeight:'200px'}}>
+                    <div className='col-md-6 col-12 mt-5 ' style={{maxHeight:'200px'}}>
 
                     <h5 className='text-secondary mb-2'>Thống kê</h5>
                     <div className='bg-white my-3 px-2 py-3'  style={{maxHeight:'200px'}} >

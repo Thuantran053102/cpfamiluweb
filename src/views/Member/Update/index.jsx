@@ -1,27 +1,30 @@
 import React, { Component } from "react";
-import Loading from "../../shares/Loading";
+import Loading from "../../../shares/Loading";
 import clsx from "clsx";
 import Style from './Update.module.scss';
-import default_img from "./../../images/default-avatar.jpg";
+import default_img from "./../../../images/default-avatar.jpg";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Path } from "../../api/Path";
+import { Path } from "../../../api/Path";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import Select from 'react-select';
-import { isEmail, IsNullOrEmpty } from "../../utils/utils";
+import { removeUnicode } from "../../../utils/utils";
+import { handleGetLable,handleGetLableSex } from "../../../utils/utils";
+import { isEmail, IsNullOrEmpty } from "../../../utils/utils";
 import { DatePicker,DateRangePicker, Stack } from 'rsuite';
 import addDays from 'date-fns/addDays';
 import subDays from 'date-fns/subDays';
 import isBefore from 'date-fns/isBefore';
-import { ApiAuthority } from "../../api/User";
+import { ApiAuthority } from "../../../api/User";
 import isCenter from 'date-fns/isBefore';
 import { getDateNew ,getBirthdate,getTerminationDate,getDateNewHire,
     getTerminationHire,getDateNewBirth,getHireBirth
-} from "../../utils/utils";
+} from "../../../utils/utils";
 import  isAfter  from "date-fns/isAfter";
 
-import { postManagerImageOpenSale } from "../../api/User";
-import { CheckTOkenRule,CheckUserRule } from "../../shares/Func";
+import { postManagerImageOpenSale } from "../../../api/User";
+import { CheckTOkenRule,CheckUserRule } from "../../../shares/Func";
 import moment from "moment";
 
 const { allowedRange } =
@@ -32,6 +35,11 @@ class UpdateMem extends Component{
       super(props)
       
       this.state = {
+        ShowFirstDatePicker:{
+            hire:true,
+            termination:true,
+            birthdate:true,
+        },
         provinceData: [
             {User_ID:'USR001',
                 Full_Name:"Trần Văn Thuận",
@@ -44,30 +52,34 @@ class UpdateMem extends Component{
         adress:[],
         Banner_Image: {},
         Banner_Image_File: null,
+        Group_Image_File:'',
         filePreview:'',
         imgAvatar:'',
         valueSearch: '',
         valuePosition:'',
         valueCompany:'',
+        imgFormat:['png',"jpg","jpeg",
+        "JPG","PNG","JPEG","jpe",
+        "JPE","bmp","BMP","gif","GIF"],
         check:{
-            chID:false,
-            chName:false,
-            chSex:false,
-            chPerformance:false,
-            chStatus:false,
-            chStatusJob:false,
-            chEmail:false,
-            chPhone:false,
-            chAdress:false,
-            chHireDate:false,
-            chTermination:false,
-            chBirthDate:false,
-            chImg:false,
-            chProvince:false,
-            chCountryName:false,
-            chNationality:false,
-            chPosition:false,
-            chCompany:false,
+            chID:true,
+            chName:true,
+            chSex:true,
+            chPerformance:true,
+            chStatus:true,
+            chStatusJob:true,
+            chEmail:true,
+            chPhone:true,
+            chAdress:true,
+            chHireDate:true,
+            chTermination:true,
+            chBirthDate:true,
+            chImg:true,
+            chProvince:true,
+            chCountryName:true,
+            chNationality:true,
+            chPosition:true,
+            chCompany:true,
           },
           
         Member:{
@@ -110,8 +122,8 @@ class UpdateMem extends Component{
             { value: '', label: '' }
           ],
         optionsSex :[
-            { value: 1, label: 'Nam' },
-            { value: 2, label: 'Nữ' },
+            { value: 'M', label: 'Nam' },
+            { value: 'F', label: 'Nữ' },
           ],
         optionPerformance:[
             { value: 1, label: 'Tham gia' },
@@ -143,11 +155,43 @@ class UpdateMem extends Component{
     }
 
     componentDidMount=()=>{
+        this.handleGetValueMem()
         this.fnHandleGetAuthority()
         this.fnHandleGetNationality()
         this.fnHandleGetPosition()
         this.fnHandleGetCompany()
+        
     }
+
+    handleGetValueMem=async()=>{
+        const pathname= window.location.pathname.slice(window.location.pathname.lastIndexOf('/')+1)
+       
+        let Token = await CheckTOkenRule();
+        let User = await CheckUserRule();
+        const username=User.username
+        const password= User.password
+        const valuef={
+            "DataBaseName": Path.DataBaseName,
+            Params:  [
+                pathname
+            ],
+            StoreProcedureName: "SP_MEMBER_GET",
+            SchemaName:"SQL01UAT"
+            }
+        let formData = new FormData();
+        formData.append('data',JSON.stringify(valuef))
+        ApiAuthority(username,password,Token,formData,async res => {
+           
+           if(res.Status===200)
+           {
+                
+                this.setState({Member:res.Data[0]})
+                this.fnHandleGetLocation(res.Data[0].Province_ID)
+                
+           }
+        })
+    }
+
 
     fnHandleGetAuthority = async (id) => {
         
@@ -250,29 +294,29 @@ class UpdateMem extends Component{
         // this.setState(key,item)
     }
     handlePreviewAvatar= (e)=>{
-        // this.setState({imgValue:e.target.files[0]})
- 
-        // this.setState({
-        //     Banner_Image: e.target.files[0].name,
-        //     Banner_Image_File: e.target.files[0],
-        //     filePreview: URL.createObjectURL(e.target.files[0])
-        // });
+        const {imgFormat} = this.state
         const file = e.target.files[0];
-        file.review = URL.createObjectURL(file)
-        let name=e.target.files[0].name
-        let type=e.target.files[0].type
-        let uri = file;
-       
-
-        // const name= "67b2a7ee-147f-4177-bf3e-aa11e155c7cf.jpg"
-        // const type= "image/jpg"
-        // const uri= "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540thuan.tran%252FCLBCP/ImagePicker/67b2a7ee-147f-4177-bf3e-aa11e155c7cf.jpg"
-        // setProjectValue({...projectValue, urlImg:e.target.files[0]})
-        // setImgValue(e.target.files[0])
-        this.setState({imgAvatar:file,
-            Banner_Image:{ uri, name, type }
+        let resultimg= imgFormat.find(function(item){
+            return removeUnicode((file.name).slice((file.name).lastIndexOf('.')+1))===removeUnicode(item)
         })
-        this.handleCheckImg()
+        if(!resultimg)
+        {
+            Swal.fire('File đã chọn sai định dạng')
+        }
+        else{
+            file.review = URL.createObjectURL(file)
+            
+            this.setState({
+                Group_Image_File:e.target.files[0],imgAvatar:e.target.files[0]
+            })
+            const {check} = this.state
+            if(e.target.files[0]){
+                this.setState({check:{...check,chImg:true}})
+            }
+            else{
+                this.setState({check:{...check,chImg:false}})
+            }
+        }
     }
 
     handleCheckImg= async()=>{
@@ -330,12 +374,12 @@ class UpdateMem extends Component{
         const fmDate= moment(value).format()
        
         
-        const {Member} = this.state
+        const {Member,ShowFirstDatePicker} = this.state
         
             if(type==='hireDate')
             {
                 const termination = Member.Termination_DT
-                await this.setState({Member:{...Member,Hire_DT:fmDate}})
+                await this.setState({Member:{...Member,Hire_DT:fmDate},ShowFirstDatePicker:{...ShowFirstDatePicker,hire:false}})
                 await this.handleYear(fmDate,termination,Member.JobStatus)
                
             }
@@ -344,13 +388,13 @@ class UpdateMem extends Component{
                 
                 const hire = Member.Hire_DT
                 
-               await this.setState({Member:{...Member,Termination_DT:fmDate}})
+               await this.setState({Member:{...Member,Termination_DT:fmDate},ShowFirstDatePicker:{...ShowFirstDatePicker,termination:false}})
                await this.handleYear(hire,fmDate,Member.JobStatus)
             }
              if(type==='birthDate')
             {
                
-                await this.setState({Member:{...Member,BirthDate:fmDate}})
+                await this.setState({Member:{...Member,BirthDate:fmDate},ShowFirstDatePicker:{...ShowFirstDatePicker,birthdate:false}})
                 // this.handleCheckDate(Member.Hire_DT,Member.Termination_DT,fmDate)
             }
             this.fncheckValues(type,value)
@@ -421,100 +465,8 @@ class UpdateMem extends Component{
         this.fncheckValues(type,value.target.value)
     }
 
-    handleCheckDate=(hire,termination,birtdate)=>{
-        const {Member} = this.state
-        // if(Member.JobStatus)
-        // {
-        //     if(hire && termination )
-        //     {
-        //         let hired =hire.slice(0,hire.indexOf('-')) 
-        //         let terminationd=termination.slice(0,termination.indexOf('-')) 
-        //         let ServiceY= Number(terminationd) - Number(hired)
-        //         if(ServiceY>0  )
-        //         {
-        //             const {notify}= this.state
-        //             this.setState({notify:{...notify,
-        //                 hire:{
-        //                 value:true,
-        //                 lable:''
-        //             },termination:{
-        //                 value:true,
-        //                 lable:''
-        //             }}})
-        //             if(birtdate)
-        //             {
-        //                 let birthD=birtdate.slice(0,birtdate.indexOf('-'))
-        //                 let yearOld =Number(hired) - Number(birthD) 
-        //                 console.log(yearOld)
-        //                 if(yearOld>17)
-        //                 {
-                           
-        //                     this.setState({notify:{...notify,
-        //                         hire:{
-        //                         value:true,
-        //                         lable:'Ngày vào làm phải nhỏ hơn ngày nghỉ làm'
-        //                     },termination:{
-        //                         value:true,
-        //                         lable:'Ngày nghỉ làm phải lớn hơn ngày vào làm'
-        //                     },birtdate:{
-        //                         value:true,
-        //                         lable:'Ngày nghỉ làm phải lớn hơn ngày vào làm'
-        //                     }
-        //                     }})
-        //                 }
-        //                 else{
-        //                     const {notify}= this.state
-        //                     this.setState({notify:{...notify,
-        //                         hire:{
-        //                         value:false,
-        //                         lable:'Chưa hợp lệ với ngày sinh'
-        //                     },birtdate:{
-        //                         value:false,
-        //                         lable:'Chưa hợp lệ với ngày vào làm'
-        //                     }
-        //                     }})
-        //                 }
-        //             }
-                   
-        //         }
-        //         else{
-        //             const {notify}= this.state
-        //             this.setState({notify:{...notify,
-        //                 hire:{
-        //                 value:false,
-        //                 lable:'Ngày vào làm phải nhỏ hơn ngày nghỉ làm'
-        //             },termination:{
-        //                 value:false,
-        //                 lable:'Ngày nghỉ làm phải lớn hơn ngày vào làm'
-        //             }
-        //             }})
-        //         }
-                
-        //     }
-        // }
-    }
-    //   fnHandleGetPosition=async()=>{
-    //     let Token = await CheckTOkenRule();
-    //     let User = await CheckUserRule();
-    //     const username=JSON.parse(User).username
-    //     const password= JSON.parse(User).password
-    //     const valuef={
-    //         "DataBaseName": Path.DataBaseName,
-    //         Params:  [
-    //             username,
-    //             password
-    //         ],
-    //         StoreProcedureName: "SP_POSITION_GETAll",
-    //         SchemaName:"SQL01UAT"
-    //         }
-    //     let formData = new FormData();
-    //     formData.append('data',JSON.stringify(valuef))
-    //     await ApiAuthority(username,password,JSON.parse(Token),formData,async res => {
-    //         // setPosition( res.Data)
-    //         this.setState({position:res.Data})
-            
-    //     })
-    // }
+
+    
 
     fnHandleGetCompany=async()=>{
         let Token = await CheckTOkenRule();
@@ -547,25 +499,26 @@ class UpdateMem extends Component{
         })
     }
       handleValue = (type,e) => {
-        const {valueSearch} = this.state
+        const {valueSearch,Member} = this.state
         if(type==='Province')
         {
-            this.setState({valueSearch:e})
+            this.setState({valueSearch:e,Member:{...Member,Province_ID:e.value}})
             setTimeout(()=>{
                 this.fnHandleGetLocation(e.value)
             },500) 
         }
         if(type==='Nationality')
         {
-            this.setState({valueNationallity:e})
+            this.setState({valueNationallity:e,Member:{...Member,National_ID:e.value}})
         }
         else if(type==='Position')
         {
-            this.setState({valuePosition:e})
+            this.setState({valuePosition:e,Member:{...Member,Position_ID:e.value}})
         }else if(type ==='Company')
         {
-            this.setState({valueCompany:e})
+            this.setState({valueCompany:e,Member:{...Member,Company_Code:e.value}})
         }
+
 
         this.fncheckValues(type,e.value)
        
@@ -616,9 +569,10 @@ class UpdateMem extends Component{
                 })
             })]})
             
-            // setNationality(res.Data)
+           
         })
     }
+
     handleYear=async (hire,termination,jobStatus)=>{
         
         const {Member}= this.state
@@ -633,21 +587,19 @@ class UpdateMem extends Component{
         
         if(hire && termination && Number(jobStatus)===2)
         {
-          
-           
             let serviceYear=Number(termination.slice(0,termination.indexOf('-')))-Number(hire.slice(0,hire.indexOf('-')))
            
-            this.setState({Member:{...Member,Service_Year:serviceYear}})
+            this.setState({Member:{...Member,Service_Year:serviceYear,JobStatus:jobStatus}})
         }
         else if(Number(jobStatus)===1)
         {
-            this.setState({Member:{...Member,Service_Year:IsNullOrEmpty,Termination_DT:''}})
+            this.setState({Member:{...Member,Service_Year:IsNullOrEmpty,Termination_DT:'',JobStatus:jobStatus}})
         }
        
     }
 
     fncheckValues=(type,value)=>{
-        const {stateProfile}= this.state
+        const {Member}= this.state
         if(type==='EMPL_ID')
         {
             
@@ -706,10 +658,10 @@ class UpdateMem extends Component{
         if(type=== 'terminationDate')
         {
         
-            // const {check,stateProfile} = this.state
+            // const {check,Member} = this.state
             // (value && moment(value).format("DD/MM/YYYY") !== moment(new Date()).format("DD/MM/YYYY")) ?this.setState({check:{...check,chTermination:false}}):this.setState({check:{...check,chTermination:true}})
 
-            const {check,stateProfile} = this.state
+            const {check,Member} = this.state
             
             value && moment(value).format("DD/MM/YYYY") !== moment(new Date()).format("DD/MM/YYYY") ?this.setState({check:{...check,chTermination:true}}):this.setState({check:{...check,chTermination:false}})
         }
@@ -744,15 +696,209 @@ class UpdateMem extends Component{
             value ? this.setState({check:{...check,chCompany:true}}):this.setState({check:{...check,chCompany:false}})
         }
     }
+
+
+    handleCreateMem=async()=>{
+        const {Member,check,imgAvatar,Group_Image_File} = this.state
+        console.log('imgAvatar',imgAvatar)
+        console.log('12323',check)
+        let tifOptions = Object.keys(check).map(function( key  ) {
+      
+            
+              return check[key]
+            
+          });
+         
+          let isDescArray= tifOptions.every(function (item, index, arr) {
+                if (item) {
+                    return true
+                } else {
+                    return false
+                }
+            });
+            
+           if(isDescArray)
+           {
+
+            console.log('3q21',Member)
+               let Token = await CheckTOkenRule();
+               let User = await CheckUserRule();
+               const username=User.username
+               const password= User.password
+               const Body = !Group_Image_File?{
+                   "DataBaseName": Path.DataBaseName,
+                        
+                       "Params":  [
+                         Member.EMPL_ID,
+                         Member.Name_Local,
+                         Member.Sex,
+                         moment(Member.BirthDate).format('yyyy-MM-DD') ,
+                         moment(Member.Hire_DT).format('yyyy-MM-DD'),
+                         Member.Termination_DT ?moment( Member.Termination_DT).format('yyyy-MM-DD'):'',
+                         Member.Service_Year,
+                         Member.Performance,
+                         Member.Phone,
+                         Member.Email,
+                         Member.Address,
+                         Member.Status,
+                         Member.JobStatus,
+                         Member.Situation,
+                         Member.HealthStatus,
+                         Member.Remark,
+                         Member.Province_ID,
+                         Member.Position_ID,
+                         Member.National_ID,
+                         Member.Company_Code,
+                         Member.Image
+                       ],
+                       "StoreProcedureName": "SP_MEMBER_UPDATE",
+                   "SchemaName":"SQL01UAT"
+                   }:{
+                    "DataBaseName": Path.DataBaseName,
+                         
+                        "Params":  [
+                          Member.EMPL_ID,
+                          Member.Name_Local,
+                          Member.Sex,
+                          moment(Member.BirthDate).format('yyyy-MM-DD') ,
+                          moment(Member.Hire_DT).format('yyyy-MM-DD'),
+                          Member.Termination_DT ?moment( Member.Termination_DT).format('yyyy-MM-DD'):'',
+                          Member.Service_Year,
+                          Member.Performance,
+                          Member.Phone,
+                          Member.Email,
+                          Member.Address,
+                          Member.Status,
+                          Member.JobStatus,
+                          Member.Situation,
+                          Member.HealthStatus,
+                          Member.Remark,
+                          Member.Province_ID,
+                          Member.Position_ID,
+                          Member.National_ID,
+                          Member.Company_Code,
+                          
+                        ],
+                        "StoreProcedureName": "SP_MEMBER_UPDATE",
+                    "SchemaName":"SQL01UAT"
+                    }
+                   const formData = new FormData();
+                   formData.append('data',JSON.stringify(Body));
+                   if(imgAvatar){
+                        
+                        formData.append("files",Group_Image_File);
+                   }
+                   
+                  
+                 
+                   postManagerImageOpenSale(username,password,Token,formData,async res => {
+                    
+                    console.log('Mêm',Member)
+                    if(res.Status ===200)
+                     {
+                       
+                       // this.fnhandleGetIDFullNameUsr()
+                       Swal.fire({
+                           position: 'top-end',
+                           icon: 'success',
+                           title: 'Cập nhật thành viên thành công',
+                           showConfirmButton: false,
+                           timer: 1500
+                         })
+                         this.fnhandleGetIDFullNameUsr()
+                     }
+                     else{
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Cập nhật thất bại',
+                            showConfirmButton: false,
+                            timer: 1500
+                          })
+                          
+                     }
+               })
+           }
+           else{
+            let timerInterval
+            Swal.fire({
+              title: 'Một vài thông tin chưa hợp lệ vui lòng kiểm tra lại',
+              timer: 2000,
+              timerProgressBar: true,
+            }).then((result) => {
+              if (result.dismiss === Swal.DismissReason.timer) {
+                console.log('I was closed by the timer')
+              }
+            })
+           }
+           
+     
+    }
+
+    
+fnhandleGetIDFullNameUsr=async()=>{
+
+    console.log('312312')
+    let Token = await CheckTOkenRule();
+    let User = await CheckUserRule();
+    const username=User.username
+    const password= User.password
+    const Body = {
+        "DataBaseName": Path.DataBaseName,
+            "Params":  [
+              username,// sửa
+              password
+            ],
+            "StoreProcedureName": "SP_USER_GET",
+        "SchemaName":"SQL01UAT"
+        }
+        const formData = new FormData();
+        formData.append('data',JSON.stringify(Body));
+        postManagerImageOpenSale(username,password,Token,formData,async res => {
+          if(res.Data)
+          {
+            await this.setState({user:res.Data})
+          
+             this.fnhandleSaveLog(res.Data)
+          }
+        })
+  }
+  
+  fnhandleSaveLog=async(useId)=>{
+    
+    const {Member} = this.state
+   
+    let Token = await CheckTOkenRule();
+    let User = await CheckUserRule();
+    const username=User.username
+    const password= User.password
+    const Body = {
+        "DataBaseName": Path.DataBaseName,
+            "Params":  [
+              '3',// sửa
+              `Sửa thông tin thành viên ${Member.Name_Local} id ${Member.EMPL_ID} `,
+              useId[0].User_ID,
+              '1'// member
+            ],
+            "StoreProcedureName": "SP_LOG",
+        "SchemaName":"SQL01UAT"
+        }
+        const formData = new FormData();
+        formData.append('data',JSON.stringify(Body));
+  
+        postManagerImageOpenSale(username,password,Token,formData,async res => {
+          
+        })
+  }
+ 
     render(){
         const {isLoading,imgValue,optionsSex,optionsStatus,
             optionsJobStatus,status,Member,imgAvatar,optionPerformance,
             notify,valueSearch,valuePosition,optionsPosition,optionsNationality,adress,
-            optionsCompany,valueCompany,valueNationallity,optionsProvince,check}= this.state
+            optionsCompany,valueCompany,valueNationallity,ShowFirstDatePicker,optionsProvince,check}= this.state
 
-       
-           
-
+      
+   
         return(
         
            
@@ -764,7 +910,7 @@ class UpdateMem extends Component{
                     <div className={clsx(Style.titleWrap, 'container')}>
                         <div className='row w-100'>
                             <div className='col-12'>
-                            <h3 className={clsx(Style.title, "px-2 px-md-1")}>Thêm thành viên</h3>
+                            <h3 className={clsx(Style.title, "px-2 px-md-1")}>Cập nhật thông tin thành viên</h3>
                         </div>
                     </div>
                 </div>
@@ -775,8 +921,10 @@ class UpdateMem extends Component{
                         <div className="col-12 ">
                             
                             <div className="w-100">
+                               
+
                                 <img id="img-banner" 
-                                src={imgAvatar.review ? imgAvatar.review : default_img} 
+                                src={imgAvatar?imgAvatar.review:(Path.IMAGE_MYASSET+Member.Image)} 
                                 className={clsx(Style.imgavatar_item, "mx-auto d-block img-fluid")} />
                                 {
                                     Member.Image===''?<span className="py-2" style={{marginTop:'10px', color:'red',display:'block', textAlign:'center'}}>Chưa hợp lệ</span>:null
@@ -801,7 +949,7 @@ class UpdateMem extends Component{
                             {
                                 !check.chID? <span className='notify'>chưa hợp lệ</span>:null
                             }
-                            <input value={Member.EMPL_ID} onChange={(e)=>{this.handlechangeValue('EMPL_ID',e)}} className={clsx(Style.urlProject, 'w-100 ps-2 pe-2 ')} id='nameProject' type="text" />
+                            <input style={{backgroundColor:'#eaeaea'}} readOnly={true} value={Member.EMPL_ID} onChange={(e)=>{this.handlechangeValue('EMPL_ID',e)}} className={clsx(Style.urlProject, 'w-100 ps-2 pe-2 ')} id='nameProject' type="text" />
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
                             <label htmlFor="urlProject" style={{color:'#585858'}}>Tên thành viên</label>
@@ -815,26 +963,32 @@ class UpdateMem extends Component{
                             {
                                 !check.chSex? <span className='notify'>chưa hợp lệ</span>:null
                             }
+                            {
+                                Member.Sex?
                                 <Select
-                                    defaultValue={Member.sex}
+                                    defaultValue={handleGetLableSex(optionsSex,Member.Sex)}
                                     onChange={(item) => {
                                         this.fnHandleSelect("sex", item)
                                     }}
                                     options={optionsSex}
-                                />
+                                />:null
+                            }
+                               
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
                             <label style={{color:'#585858'}}>Tham gia/Không Tham gia</label>
                             {
                                 !check.chPerformance? <span className='notify'>chưa hợp lệ</span>:null
                             }
-                            <Select
-                                    defaultValue={Member.Performance}
-                                    onChange={(item) => {
-                                        this.fnHandleSelect("performance", item)
-                                    }}
-                                    options={optionPerformance}
-                                />
+                            {
+                                Member.Performance?
+                                    <Select
+                                            defaultValue={  handleGetLable(optionPerformance,Member.Performance)}
+                                            onChange={(item) => {this.fnHandleSelect("performance", item) }}
+                                            options={optionPerformance}
+                                    />
+                                :null
+                            }
                        
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
@@ -842,31 +996,37 @@ class UpdateMem extends Component{
                             {
                                 !check.chStatus? <span className='notify'>chưa hợp lệ</span>:null
                             }
-                            {/* onChange={(e) => { setProjectValue({ ...projectValue, description: e.target.value }) }} */}
-                            {/* <input   className={clsx(Style.urlProject, 'w-100 ps-2 pe-2')} id='urlProject' type="text" /> */}
-                            <Select
-
-                                    defaultValue={Member.status}
-                                    onChange={(item) => {
-                                        this.fnHandleSelect("status", item)
-                                    }}
-                                    options={optionsStatus}
-                                />
+                           
+                            {
+                                Member.Status?
+                                <Select
+                                defaultValue={  handleGetLable(optionsStatus,Member.Status)}
+                               
+                                onChange={(item) => {
+                                    this.fnHandleSelect("status", item)
+                                }}
+                                options={optionsStatus}
+                                />:null
+                            }
+                           
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
                             <label style={{color:'#585858'}}>Tình trạng công việc</label>
                             {
                                 !check.chStatusJob? <span className='notify'>chưa hợp lệ</span>:null
                             }
-                            {/* onChange={(e) => { setProjectValue({ ...projectValue, description: e.target.value }) }} */}
-                            {/* <input   className={clsx(Style.urlProject, 'w-100 ps-2 pe-2')} id='urlProject' type="text" /> */}
-                            <Select
-                                    defaultValue={Member.JobStatus}
+                            {
+                                Member.JobStatus?
+                                <Select
+                                    defaultValue={handleGetLable(optionsJobStatus,Member.JobStatus)}
                                     onChange={(item) => {
                                         this.fnHandleSelect("jobStatus", item)
                                     }}
                                     options={optionsJobStatus}
                                 />
+                                :null
+                            }
+                          
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
                             <label style={{color:'#585858'}}>Email</label>
@@ -910,6 +1070,13 @@ class UpdateMem extends Component{
                                     format='dd-MM-yyyy'
                                     onChange={(e)=>{this.handleDatepicker('hireDate',e)}}
                                     style={{ width: 200 }}/>
+                                    {
+                                        ShowFirstDatePicker.hire?
+                                        <span className={clsx(Style.HireDatePickerValue)}>
+                                        {moment(Member.Hire_DT).format('DD-MM-yyyy') }
+                                        </span>:null
+                                    }
+                                
                             </div>
                           
                         </div>
@@ -928,6 +1095,12 @@ class UpdateMem extends Component{
                                     <DatePicker
                                         disabledDate={allowedRange(Member.Hire_DT?moment(Member.Hire_DT).format('YYYY-MM-DD'):'',moment(new Date()).format('YYYY-MM-DD'))}
                                     format='dd-MM-yyyy' onChange={(e)=>{this.handleDatepicker('terminationDate',e)}}  style={{ width: 200 }}/>
+                                    {
+                                        ShowFirstDatePicker.termination?
+                                        <span className={clsx(Style.HireDatePickerValue)}>
+                                        {moment(Member.termination).format('DD-MM-yyyy') }
+                                        </span>:null
+                                    }
                                 </div>
                             </div>
                        
@@ -955,6 +1128,12 @@ class UpdateMem extends Component{
                                    disabledDate={allowedRange('',Member.Hire_DT ?getHireBirth(Member.Hire_DT):getDateNewBirth())}
                                    onChange={(e)=>{this.handleDatepicker('birthDate',e)}}
                                     style={{ width: 200 }}/>
+                                {
+                                        ShowFirstDatePicker.birthdate?
+                                        <span className={clsx(Style.HireDatePickerValue)}>
+                                        {moment(Member.BirthDate).format('DD-MM-yyyy') }
+                                        </span>:null
+                                    }
                             </div>
                         </div>
                    
@@ -969,7 +1148,17 @@ class UpdateMem extends Component{
                             {
                                 !check.chProvince? <span className='notify'>chưa hợp lệ</span>:null
                                 }
-                                <Select value={valueSearch} onChange={(e)=>{this.handleValue('Province',e)}} className={clsx(Style.category, 'w-100')} options={optionsProvince} defaultValue={optionsProvince}  />
+                            {
+                                Member.Province_ID && optionsProvince.length>1?
+                                    <Select 
+                                    // value={valueSearch} 
+                                    onChange={(e)=>{this.handleValue('Province',e)}} 
+                                    className={clsx(Style.category, 'w-100')} 
+                                    options={optionsProvince} 
+                                    defaultValue={handleGetLable(optionsProvince,Member.Province_ID)}  
+                                    />
+                                :null
+                            }
                               
                             </div>
                             {/* <input   className={clsx(Style.urlProject, 'w-100 ps-2 pe-2')} id='urlProject' type="text" /> */}
@@ -997,8 +1186,16 @@ class UpdateMem extends Component{
                             <label style={{color:'#585858'}}>Quốc tịch</label>
                             {
                                 !check.chNationality? <span className='notify'>chưa hợp lệ</span>:null
-                                }
-                                <Select value={valueNationallity} onChange={(e)=>{this.handleValue('Nationality',e)}} className={clsx(Style.category, 'w-100')} options={optionsNationality} defaultValue={optionsNationality}  />
+                            }
+                            {
+                                Member.National_ID && optionsNationality.length>1?
+                                <Select 
+                                // value={valueNationallity} 
+                                onChange={(e)=>{this.handleValue('Nationality',e)}} 
+                                className={clsx(Style.category, 'w-100')} 
+                                options={optionsNationality} 
+                                defaultValue={handleGetLable(optionsNationality,Member.National_ID)}  />:null
+                            }
                               
                             </div>
                         </div>
@@ -1007,15 +1204,33 @@ class UpdateMem extends Component{
                             {
                                 !check.chPosition? <span className='notify'>chưa hợp lệ</span>:null
                                 }
-                            <Select value={valuePosition} onChange={(e)=>{this.handleValue('Position',e)}} className={clsx(Style.category, 'w-100')} options={optionsPosition} defaultValue={optionsPosition}  />
+                            {
+                                Member.Position_ID && optionsPosition.length>1?
+                                <Select 
+                                // value={valuePosition} 
+                                    onChange={(e)=>{this.handleValue('Position',e)}} 
+                                    className={clsx(Style.category, 'w-100')} 
+                                    options={optionsPosition} 
+                                    defaultValue={handleGetLable(optionsPosition,Member.Position_ID)}  />
+                                :null
+                            }
                             
                         </div>
                         <div className='col-12 col-md-6 mt-2'>
                             <label style={{color:'#585858'}}>Công ty</label>
                             {
                                 !check.chCompany? <span className='notify'>chưa hợp lệ</span>:null
-                                }
-                            <Select value={valueCompany} onChange={(e)=>{this.handleValue('Company',e)}} className={clsx(Style.category, 'w-100')} options={optionsCompany} defaultValue={optionsCompany}  />
+                            }
+                            {
+                                Member.Company_Code && optionsCompany.length>1?
+                                <Select 
+                                    
+                                    onChange={(e)=>{this.handleValue('Company',e)}} 
+                                    className={clsx(Style.category, 'w-100')} 
+                                    options={optionsCompany} 
+                                    defaultValue={handleGetLable(optionsCompany,Member.Company_Code)}  
+                                    />:null
+                            }
                             
                         </div>
                     </div>
@@ -1027,20 +1242,20 @@ class UpdateMem extends Component{
                             <label style={{color:'#585858'}}>Ghi chú</label>
                             <div className="add-project_editor removeImg">
                             
-                                 <textarea onChange={(e)=>{this.handlechangeValue('remark',e)}} style={{height:'300px', width:'100%'}}></textarea>
+                                 <textarea value={Member.Remark} onChange={(e)=>{this.handlechangeValue('remark',e)}} style={{height:'300px', width:'100%'}}></textarea>
                             </div>
                         </div>
                         <div className="col-12 mt-3">
                             <label style={{color:'#585858'}}>Hoàn cảnh gia đình</label>
                             <div className="add-project_editor removeImg">
-                                <textarea onChange={(e)=>{this.handlechangeValue('Situation',e)}} style={{height:'300px', width:'100%'}}></textarea>
+                                <textarea value={Member.Situation} onChange={(e)=>{this.handlechangeValue('Situation',e)}} style={{height:'300px', width:'100%'}}></textarea>
                               
                             </div>
                         </div> <div className="col-12 mt-3">
                             <label style={{color:'#585858'}}>Tình trạng sức khỏe</label>
                             <div onChange={(e)=>{this.handlechangeValue('HealthStatus',e)}} className="add-project_editor removeImg">
                               
-                                  <textarea onChange={(e)=>{this.handlechangeValue('HealthStatus',e)}} style={{height:'300px', width:'100%'}}></textarea>
+                                  <textarea value={Member.HealthStatus} onChange={(e)=>{this.handlechangeValue('HealthStatus',e)}} style={{height:'300px', width:'100%'}}></textarea>
                             </div>
                         </div>
                            
@@ -1049,7 +1264,7 @@ class UpdateMem extends Component{
                 </div>
                 <div className='d-flex justify-content-end container'>
                
-                            <button className={clsx(Style.createbtn, 'btn')} onClick={()=>{console.log(Member)}}>Tạo</button>
+                            <button className={clsx(Style.createbtn, 'btn')} onClick={()=>{this.handleCreateMem()}}>Cập nhật</button>
                     {/* <Link >Tiếp tục</Link> */}
 
                 </div>

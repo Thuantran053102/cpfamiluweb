@@ -37,11 +37,18 @@
         }
         .imgavatar_item{
            
-          max-height: 350px;
-          margin-top: 10px;
-          border-radius:50%;
-          
-        }
+            height: 250px;
+            width: 250px;
+            margin-top: 10px;
+            border-radius:50%;
+            border: 2px solid #757575;
+          }
+          @media all and (max-width: 1200px) {
+                  .imgavatar_item {
+                      height: 180px;
+                      width: 180px;
+                  }
+          }
         .btnMoreImg{
             position: relative;
             max-width: 160px;
