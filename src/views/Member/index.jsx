@@ -242,16 +242,13 @@ class Member extends Component{
         let formData = new FormData();
         formData.append('data', JSON.stringify(valuef))
         ApiAuthority(username, password, Token, formData, async res => {
-            // this.setState({ ListMember: res.Data })
+            this.setState({ ListMember: res.Data })
         
            
         })
     }
 
-    // handleClose = () => {
-    //     this.setState({showSearch:false})
-        
-    // }
+
     handleShow = (type) => {
         if(type==='province')
         {
@@ -266,7 +263,7 @@ class Member extends Component{
         const {isLoading,ListMember,provinceData,idSreach,valueSearch,optionsProvinceI,optionsProvince,options,showSearchProvince
         ,nameSearch} = this.state
         
-        console.log('handleGetLable',handleGetLable(optionsProvinceI,3) )
+        
        
         return(
             <div className="flex-grow-1">
