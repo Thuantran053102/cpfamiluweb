@@ -1,0 +1,10 @@
+.menuLog{
+    background-color: white;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 10px;
+}
+.tableLog{
+    max-height: 600px;
+    overflow: auto;
+}

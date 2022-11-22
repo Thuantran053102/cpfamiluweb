@@ -41,11 +41,11 @@ export const POST_DATA_TOKEN = (Url, Data, handleData) => {
         password: "btR/RLAB95C2XR9pxSYnaQ=="
       }
     }).then(res => {
-        //console.log(res.data)
+       
         handleData(res.data);
     }).catch(function(error) 
       {
-        //console.log(1)
+        
         handleData({ Status: error.response.status });
       });
 }

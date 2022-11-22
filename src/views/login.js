@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import React, { Component } from "react";
-import Style from "./login.module.scss"
+import React, { Component, useEffect } from "react";
+// import "./login.scss"
 import {Url, ApiLoginDomain,DataBaseName } from "../api/Url";
 import { POST_DATA_TOKEN } from "../api/Fetch";
 import Swal from "sweetalert2";
@@ -9,63 +9,60 @@ import { ApiLogin } from "../api/User";
 import Loading from "../shares/Loading";
 import { dashboard } from "../api/SubUrl";
 import {POST_BEARER} from "../api/Center"
+import { ApiGetToken } from "../api/User";
+import { ApiDecrypt } from "../api/User";
+import { CheckFullName } from "../shares/Func";
+import { loginTemplate } from "../utils/utils";
+import { useState } from "react";
+import { ApiAuthority } from "../api/User";
 
-class Login extends Component{
-    constructor(props)
-    {
-        super(props)
-        this.state={
-            customerCode:'',
-            password:'',
-            isLoading:false,
-        }
-    }
-    onChangeText= (key,value)=>{
-        if(key=='pass')
-        {
-            this.setState({password:value})
-          
-            
-        }
-        if(key=='user')
-        {
-            this.setState({customerCode:value})
-          
-            
-        }
-    }
-    fnCheckLogin = ()=>{
-        const { password, customerCode } = this.state;
+function Login(){
+   
+    const [userDomain,setUserDomain] = useState('')
+    const [pass,setPass] = useState('')
+    const [isLoading,setIsLoading] = useState(false)
+
+    useEffect(()=>{
+      localStorage.clear();
+      // if(window.location.href.slice(window.location.href.lastIndexOf('=')+1))
+      // {
+      //     fnHandleSubLogin()
+      // }
+    },[])
+
+
+    const fnCheckLogin = ()=>{
+        
         const UrlToken =Url + ApiLoginDomain
-        if(password ==='' || customerCode ==='')
+        if(userDomain ==='' || pass ==='')
         {
-            let timerInterval
+         
             Swal.fire({
               title: 'Vui lòng nhập đủ thông tin',
               timer: 2000,
               timerProgressBar: true,
             }).then((result) => {
               if (result.dismiss === Swal.DismissReason.timer) {
-                console.log('I was closed by the timer')
               }
             })
         }
         else{
-            this.fnHandleLogin(UrlToken,customerCode,password)
+           
+            fnHandleLogin(UrlToken,userDomain,pass)
         }
 
     }
-
-    fnHandleLogin = async (UrlToken,customerCode,password)=>
+    
+   
+   
+    const fnHandleLogin = async (UrlToken,userDomain,pass)=>
     {
-        this.setState({isLoading:true})
-        
-        // let { username, password } = this.state;
+        setIsLoading(true)
         let valuef = {
             "DataBaseName":Path.DataBaseName,
             "Params":  [
-                customerCode,
-                password
+                userDomain,
+                pass
 ,
             ],
             "StoreProcedureName": "SP_TB_USER_CHECKACCOUNT",
@@ -73,19 +70,21 @@ class Login extends Component{
         let formData = new FormData();
         formData.append('data', JSON.stringify(valuef));
         let user = {
-            UserName: customerCode,
-            Password: password,
+            UserName: userDomain,
+            Password: pass,
           }
          
         ApiLogin(formData, user, async res => {
           
+           
             if (res.Status === 200) {
-                
-                this.setState({isLoading:false})
+                handleGetIDUser(res.Token,user,pass)
+                setIsLoading(false)
                 if (res.Token) { 
-                    let user = {"username":customerCode,"password": password}
+                    let user = {"username":userDomain,"password": pass}
                     localStorage.setItem('user', JSON.stringify(user));
                     localStorage.setItem('token', JSON.stringify(res.Token));
+                    
                     window.location= dashboard
                 }
                 else {
@@ -95,7 +94,7 @@ class Login extends Component{
                         timerProgressBar: true,
                       }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
-                          console.log('I was closed by the timer')
+                          
                         }
                       })
                 }
@@ -105,93 +104,149 @@ class Login extends Component{
             }
         });
     }
-     fnHandleSubLogin = async ()=>{
-            let Token = localStorage.getItem("_Token");
-            const User = JSON.parse(localStorage.getItem('_User'));
- 
-            const valuef={
-                "DataBaseName": DataBaseName,
-                Params:  [
-                    "ID04",
-                    `${'Thuận'}`
-                ],
-                StoreProcedureName: "SP_MEM_TEST_UPDATE",
-                SchemaName:"SQL01UAT"
-                }
-            let formData = new FormData();
-            formData.append('data',JSON.stringify(valuef))
-            
-            await  POST_BEARER(User.customerCode,User.password,Token,formData,res=>{
-                
-            })
 
+  //   const fnHandleSubLogin = async ()=>{
+  //     let tokenget= window.location.href.slice(window.location.href.lastIndexOf('=')+1)
+  //     var  parser, xmlDoc;
+  //     ApiGetToken(tokenget,async handleData=>{
           
-        }
-         handleSubmit=(e)=>{
-            e.preventDefault();    
-            console.log('You clicked submit.');
-          }
-    render(){
-        const {isLoading,customerCode, password} = this.state
-        return(
-            <div className="flex-grow-1">
-             {
-                isLoading ? <Loading /> : ""
-                }
-                <div className={clsx(Style.main,"container-fluid")}>
-                    <div className={clsx(Style.mainWrap,"w-100")}>
-                        <div className={clsx(Style.containerWrap,"container")}>
-                            <div className={clsx(Style.Wrap,"row")}>
-                                {/* top */}
-                                <div className={clsx(Style.topWrap,"col-12")}>
-                                    <div className={clsx(Style.topLeftWrap)}>
-                                        <h1 className={clsx(Style.titleWrap,"")}>Gia đình CP Liên Thế Hệ</h1>
-                                        <p className={clsx(Style.line,"w-100")}></p>
-                                        {/* <div className={clsx(Style.registeredWrap)}>
-                                            <span className={clsx(Style.registere)}>Đăng ký tài khoản</span>
-                                            <span className="mdi mdi-arrow-right"></span>
-                                        </div> */}
-                                    </div>
-                                </div>
-                                {/* body */}
-                                <div className={clsx(Style.bodyWrap,"col-12 ")}>
-                                    <div className={clsx(Style.loginWrap,"px-xl-5 py-xl-3 px-3 py-2 mt-xl-5 mt-2")}>
-                                        <div className={clsx(Style.headLoginWrap)}>
-                                            <h2 className={clsx(Style.titleLogin)}>Đăng nhập</h2>
-                                            <p className={clsx(Style.decriptionLogin)}>
-                                                Người dùng, Đăng nhập vào domain của bạn
-                                            </p>
-                                        </div>
-                                        <div className={clsx(Style.bodyLoginWrap ,"py-2")}>
-                                            <div className={clsx(Style.inputWrap)}>
-                                                <input value={customerCode}  onKeyPress={event => {if(event.key === 'Enter'){this.fnCheckLogin()}}}  onChange={(e)=>{this.onChangeText('user',e.target.value)}} className={clsx(Style.input ,"py-2 px-2 w-100")} type="text" placeholder="Customer Code "></input>
-                                            </div>
-                                            <div className={clsx(Style.inputWrap)}>
-                                                <input  onKeyPress={event => {if(event.key === 'Enter'){this.fnCheckLogin()}}} value={password} onChange={(e)=>{this.onChangeText('pass',e.target.value)}} className={clsx(Style.input ,"py-2 px-2  w-100")} type="password" placeholder="Nhập mật khẩu"></input>
-                                            </div>
-                                            <span className={clsx(Style.trouble  ,"d-block pt-3")}>
-                                                Gặp sự cố trong đăng nhập?
-                                            </span>
-                                            <button type="submit"  
-                                             onClick={()=>{this.fnCheckLogin()}} className={clsx(Style.btnLogin,"w-100 rounded-3 my-2 py-1")}>
-                                                Đăng nhập
-                                            </button>
-                                            {/* <button onClick={()=>{this.fnHandleSubLogin()}} className={clsx(Style.btnLogin,"w-100 my-2 py-1")}>
-                                                Đăng nhập1
-                                            </button> */}
-                                            
-                                        </div>
-                                        <div className={clsx(Style.bootomLoginWrap)}>
+  //         if(handleData.status===200)
+  //         {
+  //             console.log('handleData',handleData)
+  //             parser = new DOMParser();
+  //             xmlDoc = parser.parseFromString(handleData.data,"text/xml"); 
+             
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  //             if(xmlDoc.getElementsByTagName("User_Name")[0].innerHTML)
+  //             {
+                  
+  //                 setUserDomain(xmlDoc.getElementsByTagName("User_Name")[0].innerHTML) 
+  //                 console.log('login',JSON.stringify(xmlDoc.getElementsByTagName("Full_Name")[0].innerHTML) )
+  //                 localStorage.setItem("fullname",JSON.stringify(xmlDoc.getElementsByTagName("Full_Name")[0].innerHTML))
+
+                  
+                 
+
+  //                 // this.handlegetpass(xmlDoc.getElementsByTagName("User_Name")[0].innerHTML)
+  //                 fnHandleDecrypt(xmlDoc.getElementsByTagName("Session_No")[0].innerHTML,xmlDoc.getElementsByTagName("User_Name")[0].innerHTML)
+  //             }
+  //             else{
+  //                 localStorage.clear();
+  //             }
+  //         }
+  //     })
+  // }
+  // const fnHandleDecrypt = async (token,useDomain)=>{
+   
+  //   console.log('token',token,useDomain)
+  //     var  parser, xmlDoc;
+  //     // fnCheckLogin
+  //     ApiDecrypt(token,async handleData=>{
+  //         if(handleData.status===200)
+  //         {
+
+  //             parser = new DOMParser();
+  //             xmlDoc = parser.parseFromString(handleData.data,"text/xml"); 
+  //             if(xmlDoc.getElementsByTagName("decryptResult")[0].innerHTML)
+  //             {
+  //                 setPass(xmlDoc.getElementsByTagName("decryptResult")[0].innerHTML)
+  //                 fnCheckLogin()
+  //                 // this.fnCheckLoginfa(useDomain,xmlDoc.getElementsByTagName("decryptResult")[0].innerHTML)
+  //             }
+  //             else{
+  //                 localStorage.clear();
+  //             }
+
+  //         }
+  //     })
+  // }
+
+    const  handleGetIDUser=async(Token,username,password)=>
+    {
+     
+        const valuef = {
+            "DataBaseName": Path.DataBaseName,
+            Params: [
+    
+                username.UserName,
+                username.Password,
+            ],
+            StoreProcedureName: "SP_USER_GETID",
+            SchemaName: Path.sqlName
+        }
+        let formData = new FormData();
+        formData.append('data', JSON.stringify(valuef))
+        await ApiAuthority( username.UserName, username.Password, Token, formData, async res => {
+          if(res.Status===200)
+          {
+            console.log(res.Data[0].User_ID)
+            localStorage.setItem('userid', JSON.stringify(res.Data[0].User_ID));
+            
+          } 
+        })
+       
+    }
+
+
+    
+     
+    
+        return(
+            <div className="flex-grow-1" style={{height:'100vh'}}>
+             {/* {
+                isLoading ? <Loading /> : ""
+                } */}
+<header className="top-header">
+</header>
+
+<div id="mainCoantiner">
+ 
+
+
+  <div>
+    <div className="starsec"></div>
+    <div className="starthird"></div>
+    <div className="starfourth"></div>
+    <div className="starfifth"></div>
+  </div>
+
+
+  <div className="container text-center text-dark mt-5">
+    <div className="row">
+      <div className="col-lg-4 d-block mx-auto mt-5">
+        <div className="row">
+          <div className="col-xl-12 col-md-12 col-md-12">
+            <div className="card">
+              <div className="card-body wow-bg" id="formBg">
+                <h3 className="colorboard">Đăng nhập</h3>
+
+                <p className="text-muted">Đăng nhập bằng User Domain</p>
+
+                <div className="input-group mb-3"> 
+                <input onKeyPress={event => {if(event.key === 'Enter'){fnCheckLogin()}}} value={userDomain} type="text" onChange={(e)=>setUserDomain(e.target.value)}   className="form-control textbox-dg" placeholder="User Domain"/> </div>
+                <div className="input-group mb-4"> 
+                <input onKeyPress={event => {if(event.key === 'Enter'){fnCheckLogin()}}} value={pass} type="password" onChange={(e)=>setPass(e.target.value)} className="form-control textbox-dg" placeholder="Password"/> </div>
+
+                <div className="row">
+                  <div className="col-12"> 
+                  <button type="button" onClick={()=>{fnCheckLogin()}} className="btn btn-primary btn-block logn-btn">Login</button> </div>
+                  <div className="col-12"> 
+                
+                  </div>
                 </div>
+
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
             </div>
         )
-    }
+
 }
 export default Login

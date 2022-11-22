@@ -1,15 +1,60 @@
 import { Path } from './Path';
 import { POST_DATA_TOKEN,POST_FORM_DATA,POST_DATA_AUTHEN, POST_DATA } from './Fetch';
+import axios from 'axios';
+
 
 
 export const Api = {
-
+    // https://webservice.cp.com.vn/api_CLB_CP/api/get-token
     _getTokenCenter:Path.API +'get-token-center',
     _getNationallity:Path.API+'get-list-private',
     _uploadimg:Path.API + 'ins-list-image',
     _getLogin:Path.API+'get-token',
+    __getToken:Path.APIAUTHENTICATION + '?op=getToken',
+    __decrypt:Path.APIAUTHENTICATION+'?op=decrypt'
    
 }
+export const ApiGetToken=(a, handleData)=>{
+
+        var sr2 = `<?xml version="1.0" encoding="utf-8"?>
+        <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+          <soap:Body>
+            <getToken xmlns="http://tempuri.org/">
+              <Token>${a}</Token>
+            </getToken>
+          </soap:Body>
+        </soap:Envelope>`
+
+        axios.post(Api.__getToken,sr2,{
+            headers:{'Content-Type':'text/xml'}
+        }).then(res=>{
+            
+            handleData(res);
+        }).catch(err=>{console.log(err)})
+}
+
+
+export const ApiDecrypt=(Token, handleData)=>{
+       
+    var sr2 = `<?xml version="1.0" encoding="utf-8"?>
+    <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+        <decrypt xmlns="http://tempuri.org/">
+          <subToken>${Token}</subToken>
+          <privateKey>${Path.PrivateKey}</privateKey>
+        </decrypt>
+      </soap:Body>
+    </soap:Envelope>`
+
+    axios.post(Api.__decrypt,sr2,{
+        headers:{'Content-Type':'text/xml'}
+    }).then(res=>{
+        
+        handleData(res);
+    }).catch(err=>{console.log(err)})
+}
+
+
 export const ApiLogin=(data, user, handleData) =>{
     const username= user.UserName
     const password= user.Password
@@ -27,7 +72,7 @@ export const ApiLogin=(data, user, handleData) =>{
                         password
                     ],
                     StoreProcedureName: "SP_USERS_UPDATE",
-                    SchemaName:"SQL01UAT"
+                    SchemaName:Path.sqlName
                     }
                 let formData = new FormData();
                 formData.append('data',JSON.stringify(valuef))
@@ -122,7 +167,7 @@ export const postManagerImageOpenSale = (User_Name, User_Password, token, FormDa
                 ],
                 "StoreProcedureName": "SP_TB_USER_CHECKACCOUNT",
             }
-            console.log('đasasadas',FormData)
+          
             let formData = new FormData();
             formData.append('data',JSON.stringify(valuef));
             POST_DATA_TOKEN(Api._getTokenCenter,formData,handle=>{

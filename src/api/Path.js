@@ -1,19 +1,25 @@
 let DOMAIN = 'https://webservice.cp.com.vn/vpm_swine/';
 // let DOMAIN = 'http://172.21.73.64:8080/';http://172.21.1.99/WebServiceCPMyAssets/api/get-token-center
-let API = 'https://webservice.cp.com.vn/api_CLB_CP/api/'; //'get-token'
-
+let API = 'http://172.21.1.99/WebServiceCPMyAssets/api/'; //'get-token'
+// let APIAUTHENTICATION='https://iservice.cp.com.vn/WebServiceSSO/AuthService.asmx'
+let APIAUTHENTICATION='https://cpvdev.cp.com.vn/WebServiceSSO/AuthService.asmx'
 let API_CENTER = 'https://webservice.cp.com.vn/TemperatureOnline/api/getlistsql';
 let IMAGE = DOMAIN + 'upload/';
-let IMAGE_MYASSET = 'https://webservice.cp.com.vn/api_CLB_CP/' + 'upload/';
-let DataBaseName = '0x02000000361919C4FB16A3CD81C616078A17BC87E0DEAA95294B2B4508AEBB6DFFBBB137'
+let IMAGE_MYASSET = 'https://webservice.cp.com.vn/api_CLB_CP/'+'upload/';
+let DataBaseName = '0x020000006DE56066AB509BA82D2C95779FAE5327AE0525A62480F011C99E737C5637649EF5F56F7C213B39CA179B6F3A812FEB9A'
+let sqlName = 'SQL01UAT';
+let PrivateKey = 'P@923@923#y'
 // '0x02000000928D0CDD62DC7132E97A8C5F6772FAB5B24428F6B4EDDE35BBB4EB768F70828265ECC367B45269D72F7D3086B18D853B';
 //0x02000000084CD022DFDB5CF3FAE1C9F4A612BA5822B91E84C9C626F59B7687A326FE1A7E44F286B6F07BA2E5D396DA517798BDC4
 //0x02000000928D0CDD62DC7132E97A8C5F6772FAB5B24428F6B4EDDE35BBB4EB768F70828265ECC367B45269D72F7D3086B18D853B
 export const Path = {
+    APIAUTHENTICATION,
     API,
     API_CENTER,
     IMAGE,
     IMAGE_MYASSET,
     Product: IMAGE + 'product/',
     DataBaseName,
+    sqlName,
+    PrivateKey,
 };

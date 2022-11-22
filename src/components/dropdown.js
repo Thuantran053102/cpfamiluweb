@@ -5,12 +5,13 @@ import Modal from 'react-bootstrap/Modal';
 import { CheckTOkenRule ,CheckUserRule} from "../shares/Func";
 import { Path } from "../api/Path";
 import Swal from "sweetalert2";
+import { } from "../api/SubUrl";
 import { ApiAuthority,postManagerImageOpenSale } from "../api/User";
 function DropdownModal(props){
     const[showChild,setShowchild]= useState(false)
     const [value, setValue]= useState(props.value)
     useEffect(()=>{
-        console.log(value)
+        
     })
 
     function hanlde(){
@@ -35,7 +36,7 @@ function DropdownModal(props){
                     value.Relationship
                 ],
                 StoreProcedureName: "SP_CHILDRENT_UPDATE",
-                SchemaName:"SQL01UAT"
+                SchemaName:Path.sqlName
                 }
             let formData = new FormData();
             formData.append('data',JSON.stringify(valuef))
@@ -65,7 +66,7 @@ function DropdownModal(props){
     }
 
     async function fnhandleGetIDFullNameUsr(){
-       console.log('đấ')
+
         let Token = await CheckTOkenRule();
         let User = await CheckUserRule();
         const username=User.username
@@ -77,12 +78,12 @@ function DropdownModal(props){
                   password
                 ],
                 "StoreProcedureName": "SP_USER_GET",
-            "SchemaName":"SQL01UAT"
+            "SchemaName":Path.sqlName
             }
             const formData = new FormData();
             formData.append('data',JSON.stringify(Body));
             ApiAuthority(username,password,Token,formData,async res => {
-                console.log('eqwe',res)
+              
               if(res.Status===200)
               {
                
@@ -105,12 +106,12 @@ function DropdownModal(props){
                    password
                  ],
                  "StoreProcedureName": "SP_USER_GET",
-             "SchemaName":"SQL01UAT"
+             "SchemaName":Path.sqlName
              }
              const formData = new FormData();
              formData.append('data',JSON.stringify(Body));
              ApiAuthority(username,password,Token,formData,async res => {
-                 console.log('eqwe',res)
+               
                if(res.Status===200)
                {
                 
@@ -134,12 +135,12 @@ function DropdownModal(props){
                 
             ],
             StoreProcedureName: "SP_CHILDRENT_DELETE",
-            SchemaName:"SQL01UAT"
+            SchemaName:Path.sqlName
             }
         let formData = new FormData();
         formData.append('data',JSON.stringify(valuef))
         ApiAuthority(username,password,Token,formData,async res => {
-           console.log(res)
+        
             if(res.Status===200)
             {
                 Swal.fire({
@@ -181,7 +182,7 @@ function DropdownModal(props){
                   '3' // child
                 ],
                 "StoreProcedureName": "SP_LOG",
-            "SchemaName":"SQL01UAT"
+            "SchemaName":Path.sqlName
             }
             const formData = new FormData();
             formData.append('data',JSON.stringify(Body));
@@ -189,7 +190,7 @@ function DropdownModal(props){
             ApiAuthority(username,password,Token,formData,async res => {
               if(res.Status===200)
               {
-                window.location=`/profileMem/${props.mem.EMPL_ID}`
+                window.location=`${profileMemStr}${props.mem.EMPL_ID}`
               }
             })
       }
@@ -208,7 +209,7 @@ function DropdownModal(props){
                   '3'
                 ],
                 "StoreProcedureName": "SP_LOG",
-            "SchemaName":"SQL01UAT"
+            "SchemaName":Path.sqlName
             }
             const formData = new FormData();
             formData.append('data',JSON.stringify(Body));
@@ -216,7 +217,8 @@ function DropdownModal(props){
             ApiAuthority(username,password,Token,formData,async res => {
               if(res.Status===200)
               {
-                window.location=`/profileMem/${props.mem.EMPL_ID}`
+               
+                window.location=`${profileMemStr}${props.mem.EMPL_ID}`
               }
             })
       }
@@ -240,13 +242,13 @@ function DropdownModal(props){
     return(
         <div>
 
-            <div class="dropdown">
-            <button class="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div className="dropdown">
+            <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i className={ "text-dark mdi mdi-dots-vertical font-18 text-primary"}></i>
             </button>
-            <ul class="dropdown-menu">
-                <li onClick={()=>{hanlde()}}><div class="dropdown-item"  href="#">Chỉnh sửa</div></li>
-                <li onClick={()=>{handleDelete()}}><div class="dropdown-item"  href="#">Xóa</div></li>
+            <ul className="dropdown-menu">
+                <li onClick={()=>{hanlde()}}><div className="dropdown-item"  href="#">Chỉnh sửa</div></li>
+                <li onClick={()=>{handleDelete()}}><div className="dropdown-item"  href="#">Xóa</div></li>
             </ul>
         </div>
         <Modal

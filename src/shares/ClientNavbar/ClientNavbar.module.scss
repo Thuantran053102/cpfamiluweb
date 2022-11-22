@@ -1,6 +1,7 @@
 .main{
-    background-color: var(--bg-navbar-color);
+    background-color: var(--bs-body-color);
     max-height:80px;
+    border-bottom:1px solid #fff ;
     .brand{
         color: var(--text-logo-color);
         font-weight: bold;
@@ -21,7 +22,7 @@
 
     }
     .Collapse{
-        background-color: white;
+        background-color:  var(--bs-body-color);
         margin-left: -13px;
         margin-right: -13px;
         padding: 10px;
@@ -32,12 +33,13 @@
                 color: var(--text-color);
             }
             .itemNav:hover{
-                color: aqua;
+                color: #009688;
+                text-decoration: none !important;
             }
             .dropdown{
                 a{
                    
-                    color: var(--text-color);
+                    color: white !important;
                     
                 }
                 .dropdownItem{
@@ -68,7 +70,7 @@
                 .dropdown{
                     
                     a{
-                        color:  rgba(121,121,121,0.4);;
+                        color:  rgba(255, 255, 255, 0.7);;
                         padding: 0;
                         font-weight: 700;
                         // padding: 0;

@@ -20,14 +20,14 @@ try {
 
     /** Alertify config confirm */
     alertify.confirm().setting({
-      'title': '<i class="mdi mdi-information-outline pe-1"></i>Thông báo',
-        'labels': { ok: '<i class="mdi mdi-check me-1"></i>Đồng ý', cancel: '<i class="mdi mdi-block-helper me-1"></i>Bỏ qua' }
+      'title': '<i className="mdi mdi-information-outline pe-1"></i>Thông báo',
+        'labels': { ok: '<i className="mdi mdi-check me-1"></i>Đồng ý', cancel: '<i className="mdi mdi-block-helper me-1"></i>Bỏ qua' }
     });
 
     /** Alertify alert confirm */
     alertify.alert().setting({
-      'title': '<i class="mdi mdi-information-outline pe-1"></i>Thông báo',
-        'label': '<i class="mdi mdi-check me-1"></i>Xác nhận'
+      'title': '<i className="mdi mdi-information-outline pe-1"></i>Thông báo',
+        'label': '<i className="mdi mdi-check me-1"></i>Xác nhận'
     });
 } catch (e) {
 
@@ -57,22 +57,45 @@ export function formatNumber(num) {
 /** Auto render empty template */
 export function htmlEmptyTable(col = 10, title = 'Không tìm thấy dữ liệu') {
     if (title == '') { title = 'Không tìm thấy dữ liệu'; }
-    return `<tr class="text-muted"><td colspan="${col}" class="text-center"><div class="text-center text-muted pt-4 pb-4"><p class="mb-0"><i class="mdi mdi-48px mdi-folder-open-outline"></i></p><p>${title}</p></div></td></tr>`
+    return `<tr className="text-muted"><td colspan="${col}" className="text-center"><div className="text-center text-muted pt-4 pb-4"><p className="mb-0"><i className="mdi mdi-48px mdi-folder-open-outline"></i></p><p>${title}</p></div></td></tr>`
 }
 
 /** Auto render empty template */
 export function htmlEmptyTableAuto(element, title = '') {
     let col = $(element).find('th').length;
     if (title == '') { title = 'Không tìm thấy dữ liệu'; }
-    return `<tr class="text-muted"><td colspan="${col}" class="text-center"><div class="text-center text-muted pt-4 pb-4"><p class="mb-0"><i class="mdi mdi-48px mdi-folder-open-outline"></i></p><p>Không tìm thấy dữ liệu</p></div></td></tr>`
+    return `<tr className="text-muted"><td colspan="${col}" className="text-center"><div className="text-center text-muted pt-4 pb-4"><p className="mb-0"><i className="mdi mdi-48px mdi-folder-open-outline"></i></p><p>Không tìm thấy dữ liệu</p></div></td></tr>`
 }
 
 /** Auto render empty template for div */
 export function getEmptyTemplateForDiv(title = '') {
     if (title == '') { title = 'Không tìm thấy dữ liệu'; }
-    return `<div class="text-center m-auto text-muted pt-2 pb-2" id="empty-div"><p class="mb-0"><i class="mdi mdi-48px mdi-folder-open-outline"></i></p><p>${title}</p></div>`;
+    return `<div className="text-center m-auto text-muted pt-2 pb-2" id="empty-div"><p className="mb-0"><i className="mdi mdi-48px mdi-folder-open-outline"></i></p><p>${title}</p></div>`;
 }
 
+export function loginTemplate(){
+    $('#nmberone').click(function() {
+        $('#mainCoantiner, #formBg').removeClass('mystyleSec');
+    $('#mainCoantiner, #formBg').removeClass('mystylethird');
+    
+    });
+
+
+
+    $('#nmbertwo').click(function() {
+    $('#mainCoantiner, #formBg').removeClass('mystylethird');
+        $('#mainCoantiner, #formBg').addClass('mystyleSec');
+    
+    });
+
+
+    $('#numberthree').click(function() {
+    /* $('#catbox').removeClass('cat2');*/
+        $('#mainCoantiner, #formBg').addClass('mystylethird');
+   
+    });
+
+}
 /** Init NProgress */
 // window.addEventListener('DOMContentLoaded', () => {
 //     try {
@@ -103,7 +126,7 @@ export function getEmptyTemplateForDiv(title = '') {
 //     }
 // });
 export function handleGetLable(filterlist ,index){
-    console.log(filterlist,index)
+  
     return (
         filterlist.find(function (itemCategoty) {
           
@@ -117,7 +140,7 @@ export function handleGetLable(filterlist ,index){
 }
 export function handleShowmodal()
 {
-    console.log('dấda')
+  
   
 }
 export function handleGetLableSex(filterlist ,index){
@@ -175,35 +198,35 @@ const QRCODE_EXPORT_SIZE = 500;
 /** Param default render template photosipe */
 let DEFAULT_HTML_TEMPLATE_PHOTO_SWIPE = `
     <div id="div-gallery">
-        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="pswp__bg"></div>
-            <div class="pswp__scroll-wrap">
-                <div class="pswp__container">
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
+        <div className="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+            <div className="pswp__bg"></div>
+            <div className="pswp__scroll-wrap">
+                <div className="pswp__container">
+                    <div className="pswp__item"></div>
+                    <div className="pswp__item"></div>
+                    <div className="pswp__item"></div>
                 </div>
-                <div class="pswp__ui pswp__ui--hidden">
-                    <div class="pswp__top-bar">
-                        <div class="pswp__counter"></div>
-                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                        <div class="pswp__preloader">
-                            <div class="pswp__preloader__icn">
-                                <div class="pswp__preloader__cut">
-                                    <div class="pswp__preloader__donut"></div>
+                <div className="pswp__ui pswp__ui--hidden">
+                    <div className="pswp__top-bar">
+                        <div className="pswp__counter"></div>
+                        <button className="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                        <button className="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                        <button className="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                        <div className="pswp__preloader">
+                            <div className="pswp__preloader__icn">
+                                <div className="pswp__preloader__cut">
+                                    <div className="pswp__preloader__donut"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                        <div class="pswp__share-tooltip"></div>
+                    <div className="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div className="pswp__share-tooltip"></div>
                     </div>
-                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
-                    <div class="pswp__caption">
-                        <div class="pswp__caption__center"></div>
+                    <button className="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                    <button className="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                    <div className="pswp__caption">
+                        <div className="pswp__caption__center"></div>
                     </div>
                 </div>
             </div>
@@ -286,7 +309,7 @@ export function checkPasswordMatch(value1, value2) {
 $('button').not('[data-toggle="dropdown"], [data-toggle="tooltip"], [data-dismiss="modal"], [type="submit"], .right-bar-toggle, .undisable-click, .ajs-button, .applyBtn, .cancelBtn, .navbar-toggler').on('click', function() {
     let $this = $(this);
     $this.find('.mdi').addClass('d-none');
-    $this.prepend('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
+    $this.prepend('<i className="mdi mdi-spin mdi-loading mr-1"></i>');
     $this.attr('disabled', true);
     delay(function() {
         $this.find('.mdi-spin').remove();
@@ -345,7 +368,7 @@ export function initCarousel(element, item, autoPlay) {
             pagination: false,
             autoPlay: autoPlay,
             navigation: true,
-            navigationText: ['<i class="arrow-me left"></i>', '<i class="arrow-me right"></i>'],
+            navigationText: ['<i className="arrow-me left"></i>', '<i className="arrow-me right"></i>'],
             stopOnHover: true
         });
     }
@@ -370,7 +393,7 @@ export function initCarouselProduct(element, item, autoPlay) {
             items: 5,
             pagination: false,
             autoPlay: autoPlay,
-            navigationText: ["<i class='arrow-me left'></i>", '<i class="arrow-me right"></i>'],
+            navigationText: ["<i className='arrow-me left'></i>", '<i className="arrow-me right"></i>'],
             stopOnHover: true,
             responsive: true,
         });
@@ -817,3 +840,40 @@ export   function DocTienBangChu(SoTien)
        KetQua = KetQua.substring(1,2).toUpperCase()+ KetQua.substring(2);
        return KetQua;//.substring(0, 1);//.toUpperCase();// + KetQua.substring(1);
     }
+
+    export const removeAccents=(str)=>{
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+            if (AccentsMap[i] == ' ' && AccentsMap[i + 1] == ' ') {
+                AccentsMap[i + 1] = '';
+                i = i - 1;
+            }
+        }
+        str = str.replace(/ +(?= )/g, '');
+        str = str.replace(/[.,;:'"!@#$%^&*()+_=?|\/`~<>]/g, '');
+        str = str.replace(/ /g, '');
+        str = str.replace(/--/g, '');
+        return str;
+
+        
+      }
+
+     
+    

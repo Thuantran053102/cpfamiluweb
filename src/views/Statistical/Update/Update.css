@@ -1,0 +1,29 @@
+
+.hoverMore{
+    background-color: var(--admin-btn-color);
+    border-radius: var(--boder-radius);
+    color: var(--text-nav-color);
+    max-width: 160px;
+    flex:1
+}
+.hoverMore:hover{
+    background-color:  var(--nav-color) !important;
+}
+.TerminationDTPicker{
+
+    display: flex;
+    position: relative;
+    justify-content: start;
+    align-items: center;
+
+}
+.HireDatePickerValue{
+    left: 5px;
+    position: absolute;
+    padding-right: 25px;
+    /* top: 50%;
+    left: 10%; */
+    z-index: 6;
+    background-color: #fff;
+    padding-bottom: 10px;
+}

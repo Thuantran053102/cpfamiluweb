@@ -1,0 +1,7 @@
+.buttonBo{
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: var( --admin-btn-color);
+    color: aliceblue;
+    font-size: 20px;
+}

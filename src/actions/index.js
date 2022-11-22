@@ -14,7 +14,9 @@ export const RemoveCart = (data) => {
 }
 
 export const changeToEng = () => {
-    console.log("hlo")
+   
+
+    
     return {
         type: EN
     }

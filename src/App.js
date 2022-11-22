@@ -12,9 +12,10 @@ import Login from './views/login';
 import {QRCodeSVG} from 'qrcode.react';
 import ClientLayout from './layouts/ClientLayout';
 import "rsuite/dist/rsuite.css";
+import { login ,subUrl} from './api/SubUrl';
 
 import "./css/main.css"
-import Register from './views/Register';
+
 import {
   BrowserRouter,
   Route, Switch
@@ -28,18 +29,16 @@ export default class App extends Component {
     }
   }
   componentDidMount=()=>{
-    
+    console.log('dsad')
   }
  
   render(){
     return(
       <>
-      
         <BrowserRouter>
             <Switch>
-              <Route  path="/login" component={Login}/>
-              
-              <Route  path="/" component={ClientLayout}/>
+              <Route  path={login} component={Login}/>
+              <Route  path={subUrl} component={ClientLayout}/>
             </Switch>
         </BrowserRouter>
       </>

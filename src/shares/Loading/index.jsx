@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import logoCharityLoaing from '../../images/logo.png';
 import loadingGif from '../../images/loading.gif'
-import { Audio } from 'react-loader-spinner'
+import { Dna } from 'react-loader-spinner'
+
 Loading.propTypes = {
 
 };
@@ -17,16 +18,15 @@ function Loading(props) {
             <div className="container-fluid d-flex flex-column h-100 align-items-center justify-content-center">
                 <div style={{ display:'flex',justifyContent:'center'}}>
 
-                    <img src={logoCharityLoaing} style={{height:'100px'}} className="img-fluid" alt="Loading..." />
+                    <img src={logoCharityLoaing} style={{height:'100px'}} className="img-fluid p-3" alt="Loading..." />
                 </div>
-                <Audio
+                <Dna
+                    visible={true}
                     height="80"
                     width="80"
-                    radius="9"
-                    color="green"
-                    ariaLabel="loading"
-                    wrapperStyle
-                    wrapperClass
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="dna-wrapper"
                     />
             </div>
         </div>

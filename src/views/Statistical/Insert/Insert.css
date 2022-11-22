@@ -1,0 +1,11 @@
+
+.hoverMore{
+    background-color: var(--admin-btn-color);
+    border-radius: var(--boder-radius);
+    color: var(--text-nav-color);
+    max-width: 160px;
+    flex:1
+}
+.hoverMore:hover{
+    background-color:  var(--nav-color) !important;
+}

@@ -16,7 +16,7 @@ export const POST_BEARER = async (UserName, Password, UrlPost, Body, handleData)
         // thành công 
        if(res!== 401 && res.Status !==401)
        {
-            console.log('res',res)
+         
             handleData(res)
            
        }
@@ -44,7 +44,7 @@ export const POST_BEARER = async (UserName, Password, UrlPost, Body, handleData)
                         return;
                     }
                     else {
-                        console.log('URLToken',URLPOST)
+                       
                         POST_FORM_DATA(URLPOST, Token, Body, res => {
                             handleData(res)
                         })
